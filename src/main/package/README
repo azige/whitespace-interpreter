@@ -1,0 +1,19 @@
+Whitespace 编程语言的 Java 实现的解释器。
+关于 Whitespace 编程语言可以参考这里 http://compsoc.dur.ac.uk/whitespace/
+================================================================================
+whitespace 命令的使用方法
+./whitespace input_file
+
+例如
+./whitespace hworld.ws
+
+可以得到运行结果
+Hello, world!
+
+更多的 Whitespace 的示例源代码可以从这里获得
+http://compsoc.dur.ac.uk/whitespace/examples.php
+================================================================================
+本程序以 Apache License, Version 2.0 授权，源代码可以从以下仓库获得
+https://github.com/azige/whitespace-interpreter
+
+Copyright 2014 Azige
