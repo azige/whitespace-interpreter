@@ -16,11 +16,10 @@
 package io.github.azige.whitespace;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.function.BinaryOperator;
 
 /**
- *
+ * Arithmetic的实现类。
  * @author Azige
  */
 public class ArithmeticImpl implements Arithmetic{

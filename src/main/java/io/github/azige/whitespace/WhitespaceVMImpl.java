@@ -16,12 +16,10 @@
 package io.github.azige.whitespace;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 /**
- *
+ * WhitespaceVM的实现。
  * @author Azige
  */
 public class WhitespaceVMImpl implements WhitespaceVM{

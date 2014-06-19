@@ -24,6 +24,8 @@ import java.io.StringReader;
 import java.math.BigInteger;
 
 /**
+ * Whitespace的解释器。<br>
+ * 此类读入Whitespace源代码，将其进行解释后生成指令序列。
  *
  * @author Azige
  */

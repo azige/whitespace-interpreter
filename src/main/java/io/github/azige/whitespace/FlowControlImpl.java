@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- *
+ * FlowControl的实现类。
  * @author Azige
  */
 public class FlowControlImpl implements FlowControl{

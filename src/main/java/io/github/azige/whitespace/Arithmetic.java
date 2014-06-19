@@ -13,23 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.azige.whitespace;
 
 /**
+ * 定义了Whitespace中的数学运算指令的接口。<br>
+ * 数学运算指令的IMP为[Tab][Space]，所有指令都是对栈顶的两个元素进行操作，并将结果放回栈顶，先入栈的元素作为左操作数。
  *
  * @author Azige
  */
 public interface Arithmetic{
 
+    /**
+     * 加法
+     */
     void add();
 
-    void div();
+    /**
+     * 减法
+     */
+    void sub();
 
-    void mod();
-
+    /**
+     * 乘法
+     */
     void mul();
 
-    void sub();
+    /**
+     * 除法
+     */
+    void div();
+
+    /**
+     * 取余
+     */
+    void mod();
 
 }

@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileReader;
 
 /**
+ * 命令行程序主类。<br>
+ * 接受单个参数并将参数对应的文件作为Whitespace源程序解释执行。
  *
  * @author Azige
  */

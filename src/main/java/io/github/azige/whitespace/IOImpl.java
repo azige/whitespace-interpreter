@@ -23,7 +23,7 @@ import java.io.PrintStream;
 import java.math.BigInteger;
 
 /**
- *
+ * IO的实现类。
  * @author Azige
  */
 public class IOImpl implements IO{

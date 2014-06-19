@@ -19,7 +19,7 @@ import java.math.BigInteger;
 import java.util.NoSuchElementException;
 
 /**
- *
+ * StackManipulation的实现类。
  * @author Azige
  */
 public class StackManipulationImpl implements StackManipulation{

@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * HeapAccess的实现类。
  * @author Azige
  */
 public class HeapAccessImpl implements HeapAccess{
