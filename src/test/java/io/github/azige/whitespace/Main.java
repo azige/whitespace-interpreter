@@ -17,6 +17,9 @@
 package io.github.azige.whitespace;
 
 
+import io.github.azige.whitespace.vm.WhitespaceVMImpl;
+import io.github.azige.whitespace.vm.WhitespaceVM;
+
 import java.io.InputStreamReader;
 
 /**

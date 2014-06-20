@@ -15,6 +15,10 @@
  */
 package io.github.azige.whitespace;
 
+import io.github.azige.whitespace.vm.WhitespaceVMImpl;
+import io.github.azige.whitespace.vm.WhitespaceVM;
+import io.github.azige.whitespace.vm.FlowControl;
+
 import static io.github.azige.whitespace.Constant.*;
 
 import java.io.BufferedReader;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.azige.whitespace;
+package io.github.azige.whitespace.vm;
 
 /**
  * 定义了Whitespace中的流程控制指令的接口。<br>
