@@ -30,7 +30,7 @@ import io.github.azige.whitespace.vm.WhitespaceVM;
 public class CommandListExecutor{
 
     private final WhitespaceVM vm;
-    private final List<Command<?>> commands= new ArrayList<>();
+    private final List<Command<?>> commands = new ArrayList<>();
     private final Map<String, Integer> labelMap = new HashMap<>();
     private int location;
 
@@ -46,13 +46,28 @@ public class CommandListExecutor{
         this.location = location;
     }
 
+    public int count(){
+        return commands.size();
+    }
+
+    public void mark(String label, int location){
+        if (labelMap.containsKey(label)){
+            throw new WhitespaceException("标签" + label + "已存在。");
+        }
+        labelMap.put(label, location);
+    }
+
+    public void jump(String label){
+        if (!labelMap.containsKey(label)){
+            throw new WhitespaceException("标签" + label + "不存在。");
+        }
+        location = labelMap.get(label);
+    }
+
     public void addCommand(Command<?> command){
         if (command.getType() == CommandType.F_MARK){
             String label = (String)command.getParameter();
-            if (labelMap.containsKey(label)){
-                throw new WhitespaceException("标签" + label + "已存在。");
-            }
-            labelMap.put(label, location);
+            mark(label, location);
         }else{
             commands.add(command);
         }
@@ -67,7 +82,7 @@ public class CommandListExecutor{
         }
     }
 
-    public void run(WhitespaceVM vm){
+    public void run(){
         while (next()){
         }
     }
