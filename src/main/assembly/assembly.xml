@@ -17,7 +17,7 @@
     <fileSets>
         <fileSet>
             <outputDirectory>/</outputDirectory>
-            <directory>src/main/package</directory>
+            <directory>src/main/pack</directory>
         </fileSet>
     </fileSets>
 </assembly>
