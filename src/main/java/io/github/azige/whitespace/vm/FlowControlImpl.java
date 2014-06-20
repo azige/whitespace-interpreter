@@ -15,102 +15,56 @@
  */
 package io.github.azige.whitespace.vm;
 
-import io.github.azige.whitespace.WhitespaceException;
-
 import java.math.BigInteger;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * FlowControl的实现类。
+ *
  * @author Azige
  */
 public class FlowControlImpl implements FlowControl{
 
     private final WhitespaceVM vm;
-    private int location;
-    final LinkedList<Command> commandList = new LinkedList<>();
     private final Deque<Integer> subroutineStack = new LinkedList<>();
-    private final Map<String, Integer> labelMap = new HashMap<>();
 
     FlowControlImpl(WhitespaceVM vm){
         this.vm = vm;
     }
 
     @Override
-    public void mark(String label){
-        if (labelMap.containsKey(label)){
-            throw new WhitespaceException("标签已存在");
-        }
-        labelMap.put(label, commandList.size());
-    }
-
-    @Override
     public void callSubroutine(String label){
-        if (!labelMap.containsKey(label)){
-            throw new WhitespaceException("标签不存在");
-        }
-        subroutineStack.push(location);
-        location = labelMap.get(label);
+        subroutineStack.push(vm.getExecutor().getLocation());
+        vm.getExecutor().jump(label);
     }
 
     @Override
     public void jump(String label){
-        if (!labelMap.containsKey(label)){
-            throw new WhitespaceException("标签不存在");
-        }
-        location = labelMap.get(label);
+        vm.getExecutor().jump(label);
     }
 
     @Override
     public void jumpIfZero(String label){
-        if (!labelMap.containsKey(label)){
-            throw new WhitespaceException("标签不存在");
-        }
         if (vm.getOpStack().pop().equals(BigInteger.ZERO)){
-            location = labelMap.get(label);
+            vm.getExecutor().jump(label);
         }
     }
 
     @Override
     public void jumpIfNegative(String label){
-        if (!labelMap.containsKey(label)){
-            throw new WhitespaceException("标签不存在");
-        }
         if (vm.getOpStack().pop().compareTo(BigInteger.ZERO) < 0){
-            location = labelMap.get(label);
+            vm.getExecutor().jump(label);
         }
     }
 
     @Override
     public void returnFromSubroutine(){
-        location = subroutineStack.pop();
+        vm.getExecutor().setLocation(subroutineStack.pop());
     }
 
     @Override
     public void exit(){
-        location = commandList.size();
-    }
-
-    @Override
-    public void addCommand(Command command){
-        commandList.add(command);
-    }
-
-    @Override
-    public int getLocation(){
-        return location;
-    }
-
-    @Override
-    public boolean nextCommand(){
-        if (location < commandList.size()){
-            commandList.get(location++).run();
-            return true;
-        }else{
-            return false;
-        }
+        vm.getExecutor().setLocation(vm.getExecutor().count());
     }
 }

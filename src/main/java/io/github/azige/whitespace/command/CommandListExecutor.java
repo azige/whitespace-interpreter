@@ -16,6 +16,7 @@
 package io.github.azige.whitespace.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,17 +66,23 @@ public class CommandListExecutor{
     }
 
     public void addCommand(Command<?> command){
+        commands.add(command);
         if (command.getType() == CommandType.F_MARK){
             String label = (String)command.getParameter();
-            mark(label, location);
-        }else{
-            commands.add(command);
+            mark(label, commands.size());
         }
+    }
+
+    public List<Command<?>> getCommandList(){
+        return Collections.unmodifiableList(commands);
     }
 
     public boolean next(){
         if (location < commands.size()){
-            commands.get(location++).execute(vm);
+            Command<?> command = commands.get(location++);
+            if (command.getType() != CommandType.F_MARK){
+                command.execute(vm);
+            }
             return true;
         }else{
             return false;

@@ -17,7 +17,6 @@ package io.github.azige.whitespace;
 
 import io.github.azige.whitespace.vm.WhitespaceVMImpl;
 import io.github.azige.whitespace.vm.WhitespaceVM;
-import io.github.azige.whitespace.vm.FlowControl;
 
 import static io.github.azige.whitespace.Constant.*;
 
@@ -26,6 +25,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
+
+import io.github.azige.whitespace.command.CommandFactory;
+import io.github.azige.whitespace.command.CommandListExecutor;
+import io.github.azige.whitespace.command.DefaultCommandFactory;
 
 /**
  * Whitespace的解释器。<br>
@@ -60,8 +63,7 @@ public class Interpreter{
     }
 
     public void run(){
-        while (vm.getFlowControl().nextCommand()){
-        }
+        vm.getExecutor().run();
     }
 
     private interface State{
@@ -72,7 +74,8 @@ public class Interpreter{
     private class StateMachine{
 
         BufferedReader reader;
-        FlowControl flow = vm.getFlowControl();
+        CommandListExecutor executor = vm.getExecutor();
+        CommandFactory commandFactory = new DefaultCommandFactory();
         StringBuilder commandBuffer;
         boolean eofFlag = false;
 
@@ -113,26 +116,26 @@ public class Interpreter{
             char c = readOne();
             if (c == SPACE){
                 final BigInteger value = readNumber();
-                flow.addCommand(() -> vm.getStackManipulation().push(value));
+                executor.addCommand(commandFactory.push(value));
             }else if (c == TAB){
                 c = readOne();
                 if (c == SPACE){
                     final int index = readNumber().intValue();
-                    flow.addCommand(() -> vm.getStackManipulation().dup(index));
+                    executor.addCommand(commandFactory.dup(index));
                 }else if (c == LF){
                     final int index = readNumber().intValue();
-                    flow.addCommand(() -> vm.getStackManipulation().remove(index));
+                    executor.addCommand(commandFactory.remove(index));
                 }else if (c == TAB){
                     throwInvalidCommand();
                 }
             }else if (c == LF){
                 c = readOne();
                 if (c == SPACE){
-                    flow.addCommand(() -> vm.getStackManipulation().dup());
+                    executor.addCommand(commandFactory.dup());
                 }else if (c == TAB){
-                    flow.addCommand(() -> vm.getStackManipulation().swap());
+                    executor.addCommand(commandFactory.swap());
                 }else if (c == LF){
-                    flow.addCommand(() -> vm.getStackManipulation().discard());
+                    executor.addCommand(commandFactory.discard());
                 }
             }
             return null;
@@ -143,18 +146,18 @@ public class Interpreter{
             if (c == SPACE){
                 c = readOne();
                 if (c == SPACE){
-                    flow.addCommand(() -> vm.getArithmetic().add());
+                    executor.addCommand(commandFactory.add());
                 }else if (c == TAB){
-                    flow.addCommand(() -> vm.getArithmetic().sub());
+                    executor.addCommand(commandFactory.sub());
                 }else if (c == LF){
-                    flow.addCommand(() -> vm.getArithmetic().mul());
+                    executor.addCommand(commandFactory.mul());
                 }
             }else if (c == TAB){
                 c = readOne();
                 if (c == SPACE){
-                    flow.addCommand(() -> vm.getArithmetic().div());
+                    executor.addCommand(commandFactory.div());
                 }else if (c == TAB){
-                    flow.addCommand(() -> vm.getArithmetic().mod());
+                    executor.addCommand(commandFactory.mod());
                 }else if (c == LF){
                     throwInvalidCommand();
                 }
@@ -167,9 +170,9 @@ public class Interpreter{
         State heap(){
             char c = readOne();
             if (c == SPACE){
-                flow.addCommand(() -> vm.getHeapAccess().store());
+                executor.addCommand(commandFactory.store());
             }else if (c == TAB){
-                flow.addCommand(() -> vm.getHeapAccess().retrieve());
+                executor.addCommand(commandFactory.retrieve());
             }else if (c == LF){
                 throwInvalidCommand();
             }
@@ -181,29 +184,29 @@ public class Interpreter{
             if (c == SPACE){
                 c = readOne();
                 if (c == SPACE){
-                    flow.mark(readLabel());
+                    executor.addCommand(commandFactory.mark(readLabel()));
                 }else if (c == TAB){
                     final String label = readLabel();
-                    flow.addCommand(() -> vm.getFlowControl().callSubroutine(label));
+                    executor.addCommand(commandFactory.callSubroutine(label));
                 }else if (c == LF){
                     final String label = readLabel();
-                    flow.addCommand(() -> vm.getFlowControl().jump(label));
+                    executor.addCommand(commandFactory.jump(label));
                 }
             }else if (c == TAB){
                 c = readOne();
                 if (c == SPACE){
                     final String label = readLabel();
-                    flow.addCommand(() -> vm.getFlowControl().jumpIfZero(label));
+                    executor.addCommand(commandFactory.jumpIfZero(label));
                 }else if (c == TAB){
                     final String label = readLabel();
-                    flow.addCommand(() -> vm.getFlowControl().jumpIfNegative(label));
+                    executor.addCommand(commandFactory.jumpIfNegative(label));
                 }else if (c == LF){
-                    flow.addCommand(() -> vm.getFlowControl().returnFromSubroutine());
+                    executor.addCommand(commandFactory.returnFromSubroutine());
                 }
             }else if (c == LF){
                 c = readOne();
                 if (c == LF){
-                    flow.addCommand(() -> vm.getFlowControl().exit());
+                    executor.addCommand(commandFactory.exit());
                 }else{
                     throwInvalidCommand();
                 }
@@ -216,18 +219,18 @@ public class Interpreter{
             if (c == SPACE){
                 c = readOne();
                 if (c == SPACE){
-                    flow.addCommand(() -> vm.getIO().printChar());
+                    executor.addCommand(commandFactory.printChar());
                 }else if (c == TAB){
-                    flow.addCommand(() -> vm.getIO().printNumber());
+                    executor.addCommand(commandFactory.printNumber());
                 }else if (c == LF){
                     throwInvalidCommand();
                 }
             }else if (c == TAB){
                 c = readOne();
                 if (c == SPACE){
-                    flow.addCommand(() -> vm.getIO().readChar());
+                    executor.addCommand(commandFactory.readChar());
                 }else if (c == TAB){
-                    flow.addCommand(() -> vm.getIO().readNumber());
+                    executor.addCommand(commandFactory.readNumber());
                 }else if (c == LF){
                     throwInvalidCommand();
                 }
@@ -297,7 +300,7 @@ public class Interpreter{
             while (true){
                 char c = readOne();
                 if (c == SPACE || c == TAB){
-                    sb.append(c);
+                    sb.append(c == SPACE ? '0' : '1');
                 }else if (c == LF){
                     return sb.toString();
                 }

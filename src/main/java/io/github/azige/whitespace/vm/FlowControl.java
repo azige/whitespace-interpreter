@@ -26,26 +26,6 @@ package io.github.azige.whitespace.vm;
 public interface FlowControl{
 
     /**
-     * 表示一个可以执行的指令。
-     */
-    public interface Command{
-
-        /**
-         * 执行此指令
-         */
-        void run();
-    }
-
-    /**
-     * 标记一个标签。<br>
-     * 此方法不应当在运行时调用，而是在要将对应的指令加入队列时，取代nextCommand而调用此方法。
-     * 即不应当在Command接口的实现中调用此方法。
-     *
-     * @param label 要标记的标签
-     */
-    void mark(String label);
-
-    /**
      * 呼叫指定的标签的子程序。
      *
      * @param label 要呼叫的标签
@@ -82,26 +62,4 @@ public interface FlowControl{
      * 结束程序，通常应当是将指令指针移到指令队列最后。
      */
     void exit();
-
-    /**
-     * 向指令队列加入一条指令。
-     *
-     * @param command 要加入的指令
-     */
-    void addCommand(Command command);
-
-    /**
-     * 获得当前指令指针的位置。<br>
-     * 可能返回任何可以表示当前指令指针的位置的数值。
-     *
-     * @return
-     */
-    int getLocation();
-
-    /**
-     * 执行下一条指令。
-     *
-     * @return 如果成功执行了指令则返回true，如果已经没有指令可以执行则返回false
-     */
-    boolean nextCommand();
 }

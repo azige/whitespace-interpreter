@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.azige.whitespace.command;
 
 import java.math.BigInteger;
@@ -24,7 +23,7 @@ import io.github.azige.whitespace.vm.WhitespaceVM;
  *
  * @author Azige
  */
-class DefaultCommandFactory extends CommandFactory{
+public class DefaultCommandFactory extends CommandFactory{
 
     @Override
     public Command<BigInteger> push(BigInteger number){
@@ -161,7 +160,7 @@ class DefaultCommandFactory extends CommandFactory{
         return new AbstractCommand<String>(CommandType.F_MARK, label){
             @Override
             public void execute(WhitespaceVM vm){
-                //                        vm.getFlowControl().mark(getParameter());
+                //vm.getFlowControl().mark(getParameter());
                 throw new UnsupportedOperationException("不可执行的指令。");
             }
         };

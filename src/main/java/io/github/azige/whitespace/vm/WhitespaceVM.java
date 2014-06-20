@@ -17,6 +17,9 @@ package io.github.azige.whitespace.vm;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.Map;
+
+import io.github.azige.whitespace.command.CommandListExecutor;
 
 /**
  * Whitespace的虚拟机模型。
@@ -32,6 +35,10 @@ public interface WhitespaceVM{
      * @return 操作数栈
      */
     LinkedList<BigInteger> getOpStack();
+
+    Map<BigInteger, BigInteger> getHeap();
+
+    CommandListExecutor getExecutor();
 
     /**
      * 获得数学运算操作对象

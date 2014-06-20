@@ -26,7 +26,6 @@ import java.util.Map;
 public class HeapAccessImpl implements HeapAccess{
 
     private final WhitespaceVM vm;
-    private final Map<BigInteger, BigInteger> heap = new HashMap<>();
 
     HeapAccessImpl(WhitespaceVM vm){
         this.vm = vm;
@@ -36,13 +35,13 @@ public class HeapAccessImpl implements HeapAccess{
     public void store(){
         BigInteger value = vm.getOpStack().pop();
         BigInteger address = vm.getOpStack().pop();
-        heap.put(address, value);
+        vm.getHeap().put(address, value);
     }
 
     @Override
     public void retrieve(){
         BigInteger address = vm.getOpStack().pop();
-        BigInteger value = heap.get(address);
+        BigInteger value = vm.getHeap().get(address);
         if (value == null){
             value = BigInteger.ZERO;
         }
