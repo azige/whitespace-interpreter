@@ -1,1 +1,0 @@
-@java -jar whitespace.jar %*

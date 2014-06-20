@@ -16,6 +16,8 @@
 package io.github.azige.whitespace;
 
 /**
+ * 定义了常量的类。<br>
+ * Whitespace的标准中，[Space]为0x20，[Tab]为0x09，[LF]为0x0a。
  *
  * @author Azige
  */

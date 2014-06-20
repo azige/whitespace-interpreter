@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.azige.whitespace;
+package io.github.azige.whitespace.vm;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.function.BinaryOperator;
 
 /**
- *
+ * Arithmetic的实现类。
  * @author Azige
  */
 public class ArithmeticImpl implements Arithmetic{

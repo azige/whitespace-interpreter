@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.azige.whitespace;
+package io.github.azige.whitespace.vm;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * HeapAccess的实现类。
  * @author Azige
  */
 public class HeapAccessImpl implements HeapAccess{
 
     private final WhitespaceVM vm;
-    private final Map<BigInteger, BigInteger> heap = new HashMap<>();
 
     HeapAccessImpl(WhitespaceVM vm){
         this.vm = vm;
@@ -36,13 +35,13 @@ public class HeapAccessImpl implements HeapAccess{
     public void store(){
         BigInteger value = vm.getOpStack().pop();
         BigInteger address = vm.getOpStack().pop();
-        heap.put(address, value);
+        vm.getHeap().put(address, value);
     }
 
     @Override
     public void retrieve(){
         BigInteger address = vm.getOpStack().pop();
-        BigInteger value = heap.get(address);
+        BigInteger value = vm.getHeap().get(address);
         if (value == null){
             value = BigInteger.ZERO;
         }

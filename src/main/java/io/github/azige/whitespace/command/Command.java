@@ -13,31 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.github.azige.whitespace.command;
 
-package io.github.azige.whitespace;
-
-import java.math.BigInteger;
+import io.github.azige.whitespace.vm.WhitespaceVM;
 
 /**
  *
  * @author Azige
  */
-public interface StackManipulation{
+public interface Command<T>{
 
-    void discard();
+    CommandType getType();
 
-    void dup();
+    T getParameter();
 
-    void dup(int index);
-
-    /**
-     * 向操作数栈中压入一个数。
-     * @param number 入栈的数
-     */
-    void push(BigInteger number);
-
-    void remove(int index);
-
-    void swap();
-
+    void execute(WhitespaceVM vm);
 }

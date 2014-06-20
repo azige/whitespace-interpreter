@@ -13,27 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.azige.whitespace;
 
-import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.Map;
+package io.github.azige.whitespace.command;
 
 /**
  *
  * @author Azige
  */
-public interface WhitespaceVM{
-
-    LinkedList<BigInteger> getOpStack();
-
-    Arithmetic getArithmetic();
-
-    FlowControl getFlowControl();
-
-    HeapAccess getHeapAccess();
-
-    IO getIO();
-
-    StackManipulation getStackManipulation();
+public enum CommandType{
+    S_PUSH,
+    S_DISCARD,
+    S_DUP,
+    S_DUP2,
+    S_REMOVE,
+    S_SWAP,
+    A_ADD,
+    A_SUB,
+    A_MUL,
+    A_DIV,
+    A_MOD,
+    H_STORE,
+    H_RETRIEVE,
+    F_MARK,
+    F_CALL,
+    F_JUMP,
+    F_JUMPZ,
+    F_JUMPN,
+    F_RETURN,
+    F_EXIT,
+    I_PCHAR,
+    I_PNUM,
+    I_RCHAR,
+    I_RNUM
 }

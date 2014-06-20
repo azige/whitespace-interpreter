@@ -15,23 +15,72 @@
  */
 package io.github.azige.whitespace;
 
+import io.github.azige.whitespace.vm.WhitespaceVMImpl;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
+import io.github.azige.whitespace.vm.WhitespaceVM;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 /**
+ * 命令行程序主类。<br>
+ * 接受单个参数并将参数对应的文件作为Whitespace源程序解释执行。
  *
  * @author Azige
  */
 public class Cli{
 
-    public static void main(String[] args) throws Exception{
-        if (args.length != 1){
-            System.err.println("Usage: whitespace input_file");
-            return;
+    public static void main(String[] args){
+        Options options = new Options()
+            .addOption("h", "help", false, "打印此消息")
+            .addOption("p", false, "不运行程序，而是将源程序翻译成可阅读的伪代码");
+
+        try{
+            CommandLineParser parser = new BasicParser();
+            CommandLine cl = parser.parse(options, args);
+
+            if (cl.hasOption('h')){
+                printHelp(System.out, options);
+                return;
+            }
+
+            String[] fileArgs = cl.getArgs();
+            if (fileArgs.length != 1){
+                printHelp(System.err, options);
+                return;
+            }
+
+            if (cl.hasOption('p')){
+                PseudoCodeGenerator generator = new PseudoCodeGenerator(System.out);
+                generator.translate(new FileReader(fileArgs[0]));
+            }else{
+                WhitespaceVM vm = new WhitespaceVMImpl();
+                Interpreter interpreter = new Interpreter(vm);
+                interpreter.interpret(new FileReader(new File(fileArgs[0])));
+                interpreter.run();
+            }
+        }catch (ParseException ex){
+            System.err.println(ex.getLocalizedMessage());
+            printHelp(System.err, options);
+        }catch (FileNotFoundException ex){
+            System.err.println(ex.getLocalizedMessage());
         }
-        WhitespaceVM vm = new WhitespaceVMImpl();
-        Interpreter interpreter = new Interpreter(vm);
-        interpreter.interpret(new FileReader(new File(args[0])));
-        interpreter.run();
+    }
+
+    static void printHelp(PrintStream out, Options options){
+        HelpFormatter hf = new HelpFormatter();
+        PrintWriter pw = new PrintWriter(out);
+        hf.printHelp(pw, hf.getWidth(), "whitespace <source file>",
+            "将指定的文件作为Whitespace源代码执行。", options, hf.getLeftPadding(), hf.getDescPadding(), null);
+        pw.flush();
     }
 }

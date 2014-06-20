@@ -1,0 +1,3 @@
+#!/bin/sh
+base_path=`dirname $0`
+java -jar $base_path/../lib/whitespace.jar $@

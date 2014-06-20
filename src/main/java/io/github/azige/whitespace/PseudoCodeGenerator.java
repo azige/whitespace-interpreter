@@ -13,36 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.azige.whitespace;
+
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.Reader;
+
+import io.github.azige.whitespace.command.Command;
 
 /**
  *
  * @author Azige
  */
-public interface FlowControl{
+public class PseudoCodeGenerator{
 
-    public interface Command{
+    private final PrintStream out;
 
-        void run();
+    public PseudoCodeGenerator(OutputStream out){
+        if (out instanceof PrintStream){
+            this.out = (PrintStream)out;
+        }else{
+            this.out = new PrintStream(out);
+        }
     }
 
-    void mark(String label);
-
-    void callSubroutine(String label);
-
-    void jump(String label);
-
-    void jumpIfZero(String label);
-
-    void jumpIfNegative(String label);
-
-    void returnFromSubroutine();
-
-    void exit();
-
-    void addCommand(Command command);
-
-    int getLocation();
-
-    boolean nextCommand();
+    public void translate(Reader input){
+        WhitespaceParser parser = new WhitespaceParser(input);
+        while (parser.hasNext()){
+            Command<?> command = parser.next();
+            out.println(command);
+        }
+    }
 }

@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package io.github.azige.whitespace;
+package io.github.azige.whitespace.vm;
 
 /**
+ * 定义了Whitespace中的堆操作指令的接口。<br>
+ * 堆操作指令的IMP为[Tab][Tab]。<br>
+ * 堆的实现也由实现类提供。
  *
  * @author Azige
  */
-public interface IO{
+public interface HeapAccess{
 
-    void printChar();
+    /**
+     * 从操作数栈中读入数据与地址，并将数据存到对应的地址里。先入栈的为地址，后入栈的为数据。
+     */
+    void store();
 
-    void printNumber();
-
-    void readChar();
-
-    void readNumber();
+    /**
+     * 从操作数栈中读入地址，并读出地址对应的数据放到操作数栈顶。
+     */
+    void retrieve();
 
 }

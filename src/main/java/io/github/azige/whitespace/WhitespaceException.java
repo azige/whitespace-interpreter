@@ -16,6 +16,7 @@
 package io.github.azige.whitespace;
 
 /**
+ * 定义了Whitespace相关的类在处理过程中会出现的异常的类。
  *
  * @author Azige
  */
