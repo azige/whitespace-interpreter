@@ -283,15 +283,16 @@ public class WhitespaceParser{
         }
 
         String readLabel(){
-            StringBuilder sb = new StringBuilder();
-            while (true){
-                char c = readOne();
-                if (c == SPACE || c == TAB){
-                    sb.append(c == SPACE ? '0' : '1');
-                }else if (c == LF){
-                    return sb.toString();
-                }
-            }
+//            StringBuilder sb = new StringBuilder();
+//            while (true){
+//                char c = readOne();
+//                if (c == SPACE || c == TAB){
+//                    sb.append(c == SPACE ? '0' : '1');
+//                }else if (c == LF){
+//                    return sb.toString();
+//                }
+//            }
+            return readNumber().toString(16);
         }
 
         void throwInvalidCommand(){
