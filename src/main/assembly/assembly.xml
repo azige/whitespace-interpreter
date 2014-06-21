@@ -18,7 +18,16 @@
     <fileSets>
         <fileSet>
             <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>bin/</exclude>
+            </excludes>
             <directory>src/main/pack</directory>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>bin</outputDirectory>
+            <directory>src/main/pack/bin</directory>
+            <directoryMode>0755</directoryMode>
+            <fileMode>0755</fileMode>
         </fileSet>
     </fileSets>
     <dependencySets>
