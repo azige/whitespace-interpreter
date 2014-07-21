@@ -15,37 +15,21 @@
  */
 package io.github.azige.whitespace.vm;
 
+import java.io.Reader;
+import java.io.Writer;
+
 /**
- * 定义了Whitespace中的数学运算指令的接口。<br>
- * 数学运算指令的IMP为[Tab][Space]，所有指令都是对栈顶的两个元素进行操作，并将结果放回栈顶，先入栈的元素作为左操作数。
+ * Whitespace虚拟机专用的IO设备。虚拟机仅有单一的输入源和输出源。Whitespace中仅定义了字符的IO操作，故使用字符流。
  *
  * @author Azige
  */
-public interface Arithmetic{
+public interface IODevice{
 
-    /**
-     * 加法
-     */
-    void add();
+    Reader getInput();
 
-    /**
-     * 减法
-     */
-    void sub();
+    void setInput(Reader input);
 
-    /**
-     * 乘法
-     */
-    void mul();
+    Writer getOutput();
 
-    /**
-     * 除法
-     */
-    void div();
-
-    /**
-     * 取余
-     */
-    void mod();
-
+    void setOutput(Writer output);
 }

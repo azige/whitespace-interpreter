@@ -16,13 +16,14 @@
 package io.github.azige.whitespace.vm;
 
 import java.math.BigInteger;
+import java.util.List;
 
 /**
- * 定义了Whitespace中的栈操作指令的接口。<br>
+ * Whitespace虚拟机专用的操作数栈。除去常规的栈操作外，还有对应Whitespace栈操作指令的一些方法。
  *
  * @author Azige
  */
-public interface StackManipulation{
+public interface OperandStack{
 
     /**
      * 向操作数栈中压入一个数。
@@ -32,9 +33,26 @@ public interface StackManipulation{
     void push(BigInteger number);
 
     /**
-     * 丢弃栈顶元素。
+     * 弹出栈顶元素。
+     *
+     * @return 栈顶元素
      */
-    void discard();
+    BigInteger pop();
+
+    /**
+     * 检查栈顶元素。
+     *
+     * @return 栈顶元素
+     */
+    BigInteger peek();
+
+    /**
+     * 检查栈顶开始的第{@code index}个元素。
+     *
+     * @param index 要检查的元素的索引
+     * @return 索引位置的元素
+     */
+    BigInteger peek(int index);
 
     /**
      * 将栈顶元素复制一份。
@@ -52,12 +70,20 @@ public interface StackManipulation{
      * 从栈中移除第{@code index}个元素。
      *
      * @param index 要移除的元素的索引
+     * @return 移除的元素
      */
-    void remove(int index);
+    BigInteger remove(int index);
 
     /**
      * 交换栈顶的两个元素。
      */
     void swap();
 
+    /**
+     * 获得此对象的<b>不可变</b>列表的表示形式。<br>
+     * 此列表的0索引位置的元素为栈顶元素。
+     *
+     * @return 对应此对象的列表
+     */
+    List<BigInteger> toList();
 }
