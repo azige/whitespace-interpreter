@@ -223,6 +223,24 @@ public class DefaultWhitespaceVM implements WhitespaceVM{
             executor.reset();
         }
 
+        @Override
+        public void end(){
+            checkReady();
+            executor.end();
+        }
+
+        @Override
+        public void call(String label){
+            checkReady();
+            executor.call(label);
+        }
+
+        @Override
+        public void ret(){
+            checkReady();
+            executor.ret();
+        }
+
         private void checkReady(){
             if (!isReady()){
                 throw new WhitespaceException("未装载程序");

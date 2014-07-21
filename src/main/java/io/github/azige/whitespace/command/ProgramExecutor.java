@@ -16,7 +16,8 @@
 package io.github.azige.whitespace.command;
 
 /**
- * 用于执行Whitespace程序的执行器。执行器有一个从0开始的指令指针，反复执行程序中的指令并移动指针，直到程序末尾。
+ * 用于执行Whitespace程序的执行器。执行器有一个从0开始的指令指针，反复执行程序中的指令并移动指针，直到程序末尾。<br>
+ * 此外，执行器还拥有子程序调用栈，用于记录子程序的调用情况。
  *
  * @author Azige
  */
@@ -65,8 +66,24 @@ public interface ProgramExecutor{
     void jump(String label);
 
     /**
-     * 重置指令指针到程序开始处
+     * 重置指令指针到程序开始处，子程序调用栈也会被清空
      */
     void reset();
 
+    /**
+     * 将指令指针移到程序结束处
+     */
+    void end();
+
+    /**
+     * 通过标签调用子程序
+     *
+     * @param label 子程序开始处的标签
+     */
+    void call(String label);
+
+    /**
+     * 从子程序中返回
+     */
+    void ret();
 }

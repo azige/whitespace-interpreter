@@ -15,6 +15,8 @@
  */
 package io.github.azige.whitespace.command;
 
+import java.util.LinkedList;
+
 import io.github.azige.whitespace.WhitespaceException;
 import io.github.azige.whitespace.vm.WhitespaceVM;
 
@@ -27,6 +29,7 @@ public class SimpleProgramExecutor implements ProgramExecutor{
 
     private final WhitespaceVM vm;
     private final Program program;
+    private final LinkedList<Integer> callStack = new LinkedList<>();
     private int location = 0;
 
     public SimpleProgramExecutor(WhitespaceVM vm, Program program){
@@ -60,6 +63,12 @@ public class SimpleProgramExecutor implements ProgramExecutor{
     @Override
     public void reset(){
         location = 0;
+        callStack.clear();
+    }
+
+    @Override
+    public void end(){
+        location = program.getCommands().size();
     }
 
     @Override
@@ -85,4 +94,16 @@ public class SimpleProgramExecutor implements ProgramExecutor{
             // Do nothing
         }
     }
+
+    @Override
+    public void call(String label){
+        callStack.push(location);
+        jump(label);
+    }
+
+    @Override
+    public void ret(){
+        location = callStack.pop();
+    }
+
 }
