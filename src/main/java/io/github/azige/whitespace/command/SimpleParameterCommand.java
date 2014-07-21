@@ -15,7 +15,9 @@
  */
 package io.github.azige.whitespace.command;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
+
+import io.github.azige.whitespace.vm.WhitespaceVM;
 
 /**
  * 有参数的指令的简单实现。
@@ -26,9 +28,9 @@ import java.util.function.Consumer;
 public class SimpleParameterCommand<T> extends Command.AbstractCommand implements ParameterCommand<T>{
 
     private final T param;
-    private final Consumer<T> c;
+    private final BiConsumer<WhitespaceVM, T> c;
 
-    public SimpleParameterCommand(CommandType type, T param, Consumer<T> c){
+    public SimpleParameterCommand(CommandType type, T param, BiConsumer<WhitespaceVM, T> c){
         super(type);
         this.param = param;
         this.c = c;
@@ -40,7 +42,7 @@ public class SimpleParameterCommand<T> extends Command.AbstractCommand implement
     }
 
     @Override
-    public void execute(){
-        c.accept(param);
+    public void execute(WhitespaceVM vm){
+        c.accept(vm, param);
     }
 }

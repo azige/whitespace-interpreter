@@ -15,6 +15,10 @@
  */
 package io.github.azige.whitespace.command;
 
+import java.util.function.Consumer;
+
+import io.github.azige.whitespace.vm.WhitespaceVM;
+
 /**
  * 没有参数的简单指令的实现。
  *
@@ -22,15 +26,15 @@ package io.github.azige.whitespace.command;
  */
 public class SimpleCommand extends Command.AbstractCommand implements ExecutableCommand{
 
-    private final Runnable r;
+    private final Consumer<WhitespaceVM> c;
 
-    public SimpleCommand(CommandType type, Runnable r){
+    public SimpleCommand(CommandType type, Consumer<WhitespaceVM> c){
         super(type);
-        this.r = r;
+        this.c = c;
     }
 
     @Override
-    public void execute(){
-        r.run();
+    public void execute(WhitespaceVM vm){
+        c.accept(vm);
     }
 }

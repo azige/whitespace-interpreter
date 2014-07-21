@@ -15,12 +15,14 @@
  */
 package io.github.azige.whitespace.command;
 
+import java.io.Serializable;
+
 /**
- * 表示Whitespace指令。
+ * 表示Whitespace指令。指令是可以序列化的。
  *
  * @author Azige
  */
-public interface Command{
+public interface Command extends Serializable{
 
     /**
      * 获得此指令的类型

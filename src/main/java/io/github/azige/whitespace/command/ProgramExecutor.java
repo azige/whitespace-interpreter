@@ -15,60 +15,25 @@
  */
 package io.github.azige.whitespace.command;
 
-import io.github.azige.whitespace.WhitespaceException;
-
 /**
- * Whitespace程序执行器。
+ * 用于执行Whitespace程序的执行器
  *
  * @author Azige
  */
-public class ProgramExecutor{
+public interface ProgramExecutor{
 
-    private final Program program;
-    private int location = 0;
+    boolean executeOne();
 
-    public ProgramExecutor(Program program){
-        this.program = program;
-    }
+    Command getCurrentCommand();
 
-    public Program getProgram(){
-        return program;
-    }
+    void executeAll(boolean fromStart);
 
-    public int getLocation(){
-        return location;
-    }
+    int getLocation();
 
-    public Command getCurrentCommand(){
-        return program.getCommands().get(location);
-    }
+    Program getProgram();
 
-    public void jump(String label){
-        if (!program.getLabelMap().containsKey(label)){
-            throw new WhitespaceException("标签" + label + "不存在。");
-        }
-        location = program.getLabelMap().get(label);
-    }
+    void jump(String label);
 
-    public void reset(){
-        location = 0;
-    }
+    void reset();
 
-    public boolean next(){
-        if (location < program.getCommands().size()){
-            Command command = program.getCommands().get(location++);
-            if (command instanceof ExecutableCommand){
-                ((ExecutableCommand)command).execute();
-            }
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public void execute(){
-        while (next()){
-            // Do nothing
-        }
-    }
 }

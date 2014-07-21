@@ -15,6 +15,7 @@
  */
 package io.github.azige.whitespace.command;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -24,11 +25,11 @@ import java.util.Map;
 import io.github.azige.whitespace.WhitespaceException;
 
 /**
- * 表示一个Whitespace程序。一个程序即是特定的指令序列的组合。
+ * 表示一个Whitespace程序。一个程序即是特定的指令序列的组合。程序也是可以序列化的
  *
  * @author Azige
  */
-public class Program{
+public class Program implements Serializable{
 
     private final List<Command> commands;
     private final Map<String, Integer> labelMap;

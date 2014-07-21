@@ -15,6 +15,8 @@
  */
 package io.github.azige.whitespace.command;
 
+import io.github.azige.whitespace.vm.WhitespaceVM;
+
 /**
  * 表示可执行的指令。
  *
@@ -24,6 +26,7 @@ public interface ExecutableCommand extends Command{
 
     /**
      * 执行此指令
+     * @param vm 用来执行此指令的Whitespace虚拟机
      */
-    void execute();
+    void execute(WhitespaceVM vm);
 }
