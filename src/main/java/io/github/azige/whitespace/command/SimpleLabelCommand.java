@@ -16,33 +16,21 @@
 package io.github.azige.whitespace.command;
 
 /**
- * 表示Whitespace指令。
+ * 标签指令的简单实现。
  *
  * @author Azige
  */
-public interface Command{
+public class SimpleLabelCommand extends Command.AbstractCommand implements LabelCommand{
 
-    /**
-     * 获得此指令的类型
-     *
-     * @return 此指令的类型
-     */
-    CommandType getType();
+    private final String label;
 
-    public abstract class AbstractCommand implements Command{
+    public SimpleLabelCommand(String label){
+        super(CommandType.F_MARK);
+        this.label = label;
+    }
 
-        private final CommandType type;
-
-        public AbstractCommand(CommandType type){
-            if (type == null){
-                throw new NullPointerException();
-            }
-            this.type = type;
-        }
-
-        @Override
-        public CommandType getType(){
-            return type;
-        }
+    @Override
+    public String getLabel(){
+        return label;
     }
 }

@@ -15,39 +15,32 @@
  */
 package io.github.azige.whitespace.command;
 
+import java.util.function.Consumer;
+
 /**
+ * 有参数的指令的简单实现。
  *
  * @author Azige
+ * @param <T> 此指令的参数类型
  */
-public abstract class AbstractCommand<T> implements Command<T>{
+public class SimpleParameterCommand<T> extends Command.AbstractCommand implements ParameterCommand<T>{
 
-    private final CommandType type;
-    private final T parameter;
+    private final T param;
+    private final Consumer<T> c;
 
-    public AbstractCommand(CommandType type){
-        this(type, null);
-    }
-
-    public AbstractCommand(CommandType type, T parameter){
-        if (type == null){
-            throw new NullPointerException();
-        }
-        this.type = type;
-        this.parameter = parameter;
+    public SimpleParameterCommand(CommandType type, T param, Consumer<T> c){
+        super(type);
+        this.param = param;
+        this.c = c;
     }
 
     @Override
-    public CommandType getType(){
-        return type;
+    public T getParam(){
+        return param;
     }
 
     @Override
-    public T getParameter(){
-        return parameter;
-    }
-
-    @Override
-    public String toString(){
-        return "" + getType() + " " + (parameter == null ? "" : parameter);
+    public void execute(){
+        c.accept(param);
     }
 }

@@ -15,63 +15,60 @@
  */
 package io.github.azige.whitespace.command;
 
-import static io.github.azige.whitespace.command.CommandType.*;
-
 import java.math.BigInteger;
 
-import io.github.azige.whitespace.vm.WhitespaceVM;
-
 /**
+ * 用于构造指令的工厂类。
  *
  * @author Azige
  */
 public abstract class CommandFactory{
 
-    public abstract Command<BigInteger> push(BigInteger number);
+    public abstract ParameterCommand<BigInteger> push(BigInteger number);
 
-    public abstract Command<?> discard();
+    public abstract ExecutableCommand discard();
 
-    public abstract Command<?> dup();
+    public abstract ExecutableCommand dup();
 
-    public abstract Command<Integer> dup(int index);
+    public abstract ParameterCommand<Integer> dup(int index);
 
-    public abstract Command<Integer> remove(int index);
+    public abstract ParameterCommand<Integer> remove(int index);
 
-    public abstract Command<?> swap();
+    public abstract ExecutableCommand swap();
 
-    public abstract Command<?> add();
+    public abstract ExecutableCommand add();
 
-    public abstract Command<?> sub();
+    public abstract ExecutableCommand sub();
 
-    public abstract Command<?> mul();
+    public abstract ExecutableCommand mul();
 
-    public abstract Command<?> div();
+    public abstract ExecutableCommand div();
 
-    public abstract Command<?> mod();
+    public abstract ExecutableCommand mod();
 
-    public abstract Command<?> store();
+    public abstract ExecutableCommand store();
 
-    public abstract Command<?> retrieve();
+    public abstract ExecutableCommand retrieve();
 
-    public abstract Command<String> mark(String label);
+    public abstract LabelCommand mark(String label);
 
-    public abstract Command<String> callSubroutine(String label);
+    public abstract ParameterCommand<String> callSubroutine(String label);
 
-    public abstract Command<String> jump(String label);
+    public abstract ParameterCommand<String> jump(String label);
 
-    public abstract Command<String> jumpIfZero(String label);
+    public abstract ParameterCommand<String> jumpIfZero(String label);
 
-    public abstract Command<String> jumpIfNegative(String label);
+    public abstract ParameterCommand<String> jumpIfNegative(String label);
 
-    public abstract Command<?> returnFromSubroutine();
+    public abstract ExecutableCommand returnFromSubroutine();
 
-    public abstract Command<?> exit();
+    public abstract ExecutableCommand exit();
 
-    public abstract Command<?> printChar();
+    public abstract ExecutableCommand printChar();
 
-    public abstract Command<?> printNumber();
+    public abstract ExecutableCommand printNumber();
 
-    public abstract Command<?> readChar();
+    public abstract ExecutableCommand readChar();
 
-    public abstract Command<?> readNumber();
+    public abstract ExecutableCommand readNumber();
 }

@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.azige.whitespace.command;
 
 /**
+ * 表示所有的 Whitespace 命令类型的枚举。
  *
  * @author Azige
  */
 public enum CommandType{
+
     S_PUSH,
     S_DISCARD,
     S_DUP,

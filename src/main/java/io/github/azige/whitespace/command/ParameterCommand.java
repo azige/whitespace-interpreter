@@ -16,33 +16,17 @@
 package io.github.azige.whitespace.command;
 
 /**
- * 表示Whitespace指令。
+ * 表示有参数的指令。
  *
  * @author Azige
+ * @param <T> 此指令的参数类型
  */
-public interface Command{
+public interface ParameterCommand<T> extends ExecutableCommand{
 
     /**
-     * 获得此指令的类型
+     * 获得此指令的参数
      *
-     * @return 此指令的类型
+     * @return 此指令的参数，如果没有参数则为null
      */
-    CommandType getType();
-
-    public abstract class AbstractCommand implements Command{
-
-        private final CommandType type;
-
-        public AbstractCommand(CommandType type){
-            if (type == null){
-                throw new NullPointerException();
-            }
-            this.type = type;
-        }
-
-        @Override
-        public CommandType getType(){
-            return type;
-        }
-    }
+    T getParam();
 }

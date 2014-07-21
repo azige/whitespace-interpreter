@@ -16,33 +16,14 @@
 package io.github.azige.whitespace.command;
 
 /**
- * 表示Whitespace指令。
+ * 表示可执行的指令。
  *
  * @author Azige
  */
-public interface Command{
+public interface ExecutableCommand extends Command{
 
     /**
-     * 获得此指令的类型
-     *
-     * @return 此指令的类型
+     * 执行此指令
      */
-    CommandType getType();
-
-    public abstract class AbstractCommand implements Command{
-
-        private final CommandType type;
-
-        public AbstractCommand(CommandType type){
-            if (type == null){
-                throw new NullPointerException();
-            }
-            this.type = type;
-        }
-
-        @Override
-        public CommandType getType(){
-            return type;
-        }
-    }
+    void execute();
 }
