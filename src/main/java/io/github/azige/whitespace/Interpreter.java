@@ -15,9 +15,6 @@
  */
 package io.github.azige.whitespace;
 
-import io.github.azige.whitespace.vm.DefaultWhitespaceVM;
-import io.github.azige.whitespace.vm.WhitespaceVM;
-
 import java.io.Reader;
 import java.io.StringReader;
 
@@ -29,48 +26,35 @@ import io.github.azige.whitespace.text.Parser;
 
 /**
  * Whitespace的解释器。<br>
- * 此类读入Whitespace源代码，将其进行解释后生成指令序列。
+ * 此类将Whitespace源代码转换为Whitespace程序对象。
  *
  * @author Azige
  */
 public class Interpreter{
 
-    private final WhitespaceVM vm;
     private final CommandFactory cf;
 
     public Interpreter(){
-        this(new DefaultWhitespaceVM(), new DefaultCommandFactory());
+        this(new DefaultCommandFactory());
     }
 
-    public Interpreter(WhitespaceVM vm){
-        this(vm, new DefaultCommandFactory());
-    }
-
-    public Interpreter(WhitespaceVM vm, CommandFactory cf){
-        this.vm = vm;
+    public Interpreter(CommandFactory cf){
         this.cf = cf;
     }
 
-    public void interpret(String code){
-        interpret(new StringReader(code));
+    public Program interpret(String code){
+        return interpret(new StringReader(code));
     }
 
-    public void interpret(Reader input){
+    public Program interpret(Reader input){
         Parser parser = new Parser(cf, input);
         Program.Builder builder = new Program.Builder();
         Command command;
         while ((command = parser.next()) != null){
             builder.addCommand(command);
         }
-        vm.getProcessor().loadProgram(builder.build());
-    }
 
-    public void run(){
-        vm.getProcessor().executeAll(true);
-    }
-
-    public WhitespaceVM getVM(){
-        return vm;
+        return builder.build();
     }
 
     public CommandFactory getCommandFactory(){

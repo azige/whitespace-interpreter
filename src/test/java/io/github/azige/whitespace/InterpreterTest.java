@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 
+import io.github.azige.whitespace.command.Program;
 import io.github.azige.whitespace.vm.DefaultWhitespaceVM;
 import io.github.azige.whitespace.vm.WhitespaceVM;
 
@@ -33,9 +34,10 @@ public class InterpreterTest{
         WhitespaceVM vm = new DefaultWhitespaceVM();
         StringWriter output = new StringWriter();
         vm.getIODevice().setOutput(output);
-        Interpreter interpreter = new Interpreter(vm);
-        interpreter.interpret(new InputStreamReader(getClass().getResourceAsStream("/1to10.ws")));
-        interpreter.run();
+        Interpreter interpreter = new Interpreter();
+        Program program = interpreter.interpret(new InputStreamReader(getClass().getResourceAsStream("/1to10.ws")));
+        vm.getProcessor().loadProgram(program);
+        vm.getProcessor().executeAll(true);
         assertEquals("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n", output.toString());
     }
 
