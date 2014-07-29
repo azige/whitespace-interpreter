@@ -22,7 +22,6 @@ import java.io.Reader;
 
 import io.github.azige.whitespace.command.Command;
 import io.github.azige.whitespace.command.DefaultCommandFactory;
-import io.github.azige.whitespace.command.Program;
 
 /**
  *
@@ -43,7 +42,6 @@ public class PseudoCodeGenerator{
 
     public void translate(Reader input){
         Parser parser = new Parser(new DefaultCommandFactory(), input);
-        Program.Builder builder = new Program.Builder();
         Command command;
         while ((command = parser.next()) != null){
             out.println(formatter.format(command));

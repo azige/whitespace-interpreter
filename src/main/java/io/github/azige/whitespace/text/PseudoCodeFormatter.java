@@ -39,17 +39,22 @@ public class PseudoCodeFormatter{
     }
 
     public String format(ParameterCommand<?> command){
-        return format(command.getType()) + " " + command.getParam();
+        Object param = command.getParam();
+        if (param instanceof String){
+            return format(command.getType(), (String)param);
+        }
+        return format(command.getType()) + " " + param;
     }
 
     public String format(LabelCommand command){
-        String label = command.getLabel();
-        label = label.replaceAll(String.valueOf(Constant.SPACE), "S")
-            .replaceAll(String.valueOf(Constant.TAB), "T");
-        return format(command.getType()) + " " + label;
+        return format(command.getType(), command.getLabel());
     }
 
     public String format(CommandType type){
         return type.toString();
+    }
+
+    public String format(CommandType type, String label){
+        return format(type) + " " + label;
     }
 }

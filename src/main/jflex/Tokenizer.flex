@@ -36,8 +36,26 @@ import io.github.azige.whitespace.WhitespaceException;
         return new Token(type);
     }
 
+    private StringBuilder labelBuilder;
+
+    private void labelBegin(){
+        yybegin(STATE_LABEL);
+        labelBuilder = new StringBuilder();
+    }
+
+    private void labelSpace(){
+        labelBuilder.append('S');
+    }
+
+    private void labelTab(){
+        labelBuilder.append('T');
+    }
+
     private Token label(){
-        return new Token(yytext());
+        yybegin(YYINITIAL);
+        String label = labelBuilder.toString();
+        labelBuilder = null;
+        return new Token(label);
     }
 
     private StringBuilder numberBuilder;
@@ -85,8 +103,6 @@ S       = {Ignore}* {Space}
 T       = {Ignore}* {Tab}
 L       = {Ignore}* {LF}
 
-Label   = ({S} | {T})+ {L}
-
 IMP_S   = {S}
 IMP_A   = {T} {S}
 IMP_H   = {T} {T}
@@ -116,15 +132,15 @@ IMP_I   = {T} {L}
 {IMP_H} {S}                 { return command(H_STORE); }
 {IMP_H} {T}                 { return command(H_RETRIEVE); }
 
-{IMP_F} {S} {S}             { yybegin(STATE_LABEL);
+{IMP_F} {S} {S}             { labelBegin();
                               return command(F_MARK); }
-{IMP_F} {S} {T}             { yybegin(STATE_LABEL);
+{IMP_F} {S} {T}             { labelBegin();
                               return command(F_CALL); }
-{IMP_F} {S} {L}             { yybegin(STATE_LABEL);
+{IMP_F} {S} {L}             { labelBegin();
                               return command(F_JUMP); }
-{IMP_F} {T} {S}             { yybegin(STATE_LABEL);
+{IMP_F} {T} {S}             { labelBegin();
                               return command(F_JUMPZ); }
-{IMP_F} {T} {T}             { yybegin(STATE_LABEL);
+{IMP_F} {T} {T}             { labelBegin();
                               return command(F_JUMPN); }
 {IMP_F} {T} {L}             { return command(F_RETURN); }
 {IMP_F} {L} {L}             { return command(F_EXIT); }
@@ -145,5 +161,8 @@ IMP_I   = {T} {L}
     {L}                     { return number(); }
 }
 
-<STATE_LABEL> {Label}       { yybegin(YYINITIAL);
-                              return label(); }
+<STATE_LABEL> {
+    {S}                     { labelSpace(); }
+    {T}                     { labelTab(); }
+    {L}                     { return label(); }
+}
