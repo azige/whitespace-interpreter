@@ -1,7 +1,7 @@
 
-package io.github.azige.whitespace.parser;
+package io.github.azige.whitespace.text;
 
-import static io.github.azige.whitespace.parser.Token.Type.*;
+import static io.github.azige.whitespace.text.Token.Type.*;
 
 import java.math.BigInteger;
 import java.io.IOException;

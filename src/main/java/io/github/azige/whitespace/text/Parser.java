@@ -28,7 +28,6 @@ import java.util.function.Supplier;
 
 import io.github.azige.whitespace.command.Command;
 import io.github.azige.whitespace.command.CommandFactory;
-import io.github.azige.whitespace.parser.Tokenizer;
 
 /**
  *

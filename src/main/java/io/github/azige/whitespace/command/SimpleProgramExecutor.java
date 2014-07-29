@@ -49,6 +49,9 @@ public class SimpleProgramExecutor implements ProgramExecutor{
 
     @Override
     public Command getCurrentCommand(){
+        if (location >= program.getCommands().size()){
+            return null;
+        }
         return program.getCommands().get(location);
     }
 

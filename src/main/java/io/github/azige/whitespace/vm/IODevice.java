@@ -15,6 +15,7 @@
  */
 package io.github.azige.whitespace.vm;
 
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -29,7 +30,7 @@ public interface IODevice{
 
     void setInput(Reader input);
 
-    Writer getOutput();
+    PrintWriter getOutput();
 
     void setOutput(Writer output);
 }

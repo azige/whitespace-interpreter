@@ -16,8 +16,6 @@
 
 package io.github.azige.whitespace.text;
 
-import io.github.azige.whitespace.parser.Tokenizer;
-
 import static org.junit.Assert.*;
 
 import java.io.InputStreamReader;

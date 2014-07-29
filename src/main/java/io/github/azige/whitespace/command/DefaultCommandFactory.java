@@ -18,7 +18,6 @@ package io.github.azige.whitespace.command;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
@@ -26,7 +25,6 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 
 import io.github.azige.whitespace.WhitespaceException;
-import io.github.azige.whitespace.command.Command.AbstractCommand;
 import io.github.azige.whitespace.vm.WhitespaceVM;
 
 /**
@@ -196,11 +194,7 @@ public class DefaultCommandFactory extends CommandFactory{
         return new SimpleCommand(CommandType.I_PCHAR,
             (Consumer<WhitespaceVM> & Serializable)(vm -> {
                 BigInteger c = vm.getOperandStack().pop();
-                try{
-                    vm.getIODevice().getOutput().write(c.intValue());
-                }catch (IOException ex){
-                    throw new WhitespaceException(ex);
-                }
+                vm.getIODevice().getOutput().printf("%c", (char)c.intValue());
             }));
     }
 
@@ -209,11 +203,7 @@ public class DefaultCommandFactory extends CommandFactory{
         return new SimpleCommand(CommandType.I_PNUM,
             (Consumer<WhitespaceVM> & Serializable)(vm -> {
                 BigInteger c = vm.getOperandStack().pop();
-                try{
-                    vm.getIODevice().getOutput().write(c.toString());
-                }catch (IOException ex){
-                    throw new WhitespaceException(ex);
-                }
+                vm.getIODevice().getOutput().printf("%d", c);
             }));
     }
 

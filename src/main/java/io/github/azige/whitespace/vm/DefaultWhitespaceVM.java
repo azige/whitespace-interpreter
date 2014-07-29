@@ -17,6 +17,7 @@ package io.github.azige.whitespace.vm;
 
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.math.BigInteger;
@@ -108,7 +109,7 @@ public class DefaultWhitespaceVM implements WhitespaceVM{
         }
     };
 
-    private final HeapMemory heapMemory = new HeapMemory() {
+    private final HeapMemory heapMemory = new HeapMemory(){
 
         private final Map<BigInteger, BigInteger> map = new HashMap<>();
 
@@ -141,10 +142,10 @@ public class DefaultWhitespaceVM implements WhitespaceVM{
         }
     };
 
-    private final IODevice iODevice = new IODevice() {
+    private final IODevice iODevice = new IODevice(){
 
         private Reader input = new InputStreamReader(System.in);
-        private Writer output = new OutputStreamWriter(System.out);
+        private PrintWriter output = new PrintWriter(System.out, true);
 
         @Override
         public Reader getInput(){
@@ -157,17 +158,21 @@ public class DefaultWhitespaceVM implements WhitespaceVM{
         }
 
         @Override
-        public Writer getOutput(){
+        public PrintWriter getOutput(){
             return output;
         }
 
         @Override
         public void setOutput(Writer output){
-            this.output = output;
+            if (output instanceof PrintWriter){
+                this.output = (PrintWriter)output;
+            }else{
+                this.output = new PrintWriter(output, true);
+            }
         }
     };
 
-    private final Processor processor = new Processor() {
+    private final Processor processor = new Processor(){
 
         private ProgramExecutor executor = null;
 
