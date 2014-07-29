@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package io.github.azige.whitespace;
+package io.github.azige.whitespace.text;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 
 import io.github.azige.whitespace.command.Command;
+import io.github.azige.whitespace.command.DefaultCommandFactory;
+import io.github.azige.whitespace.command.Program;
 
 /**
  *
@@ -29,6 +31,7 @@ import io.github.azige.whitespace.command.Command;
 public class PseudoCodeGenerator{
 
     private final PrintStream out;
+    private final PseudoCodeFormatter formatter = new PseudoCodeFormatter();
 
     public PseudoCodeGenerator(OutputStream out){
         if (out instanceof PrintStream){
@@ -39,10 +42,11 @@ public class PseudoCodeGenerator{
     }
 
     public void translate(Reader input){
-        WhitespaceParser parser = new WhitespaceParser(input);
-        while (parser.hasNext()){
-            Command<?> command = parser.next();
-            out.println(command);
+        Parser parser = new Parser(new DefaultCommandFactory(), input);
+        Program.Builder builder = new Program.Builder();
+        Command command;
+        while ((command = parser.next()) != null){
+            out.println(formatter.format(command));
         }
     }
 }

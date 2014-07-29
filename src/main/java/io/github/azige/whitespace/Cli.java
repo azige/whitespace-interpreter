@@ -15,7 +15,8 @@
  */
 package io.github.azige.whitespace;
 
-import io.github.azige.whitespace.vm.WhitespaceVMImpl;
+import io.github.azige.whitespace.text.PseudoCodeGenerator;
+import io.github.azige.whitespace.vm.DefaultWhitespaceVM;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,7 +64,7 @@ public class Cli{
                 PseudoCodeGenerator generator = new PseudoCodeGenerator(System.out);
                 generator.translate(new FileReader(fileArgs[0]));
             }else{
-                WhitespaceVM vm = new WhitespaceVMImpl();
+                WhitespaceVM vm = new DefaultWhitespaceVM();
                 Interpreter interpreter = new Interpreter(vm);
                 interpreter.interpret(new FileReader(new File(fileArgs[0])));
                 interpreter.run();

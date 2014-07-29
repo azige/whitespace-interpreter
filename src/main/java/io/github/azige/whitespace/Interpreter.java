@@ -15,11 +15,17 @@
  */
 package io.github.azige.whitespace;
 
-import io.github.azige.whitespace.vm.WhitespaceVMImpl;
+import io.github.azige.whitespace.vm.DefaultWhitespaceVM;
 import io.github.azige.whitespace.vm.WhitespaceVM;
 
 import java.io.Reader;
 import java.io.StringReader;
+
+import io.github.azige.whitespace.command.Command;
+import io.github.azige.whitespace.command.CommandFactory;
+import io.github.azige.whitespace.command.DefaultCommandFactory;
+import io.github.azige.whitespace.command.Program;
+import io.github.azige.whitespace.text.Parser;
 
 /**
  * Whitespace的解释器。<br>
@@ -30,27 +36,44 @@ import java.io.StringReader;
 public class Interpreter{
 
     private final WhitespaceVM vm;
+    private final CommandFactory cf;
 
     public Interpreter(){
-        this(new WhitespaceVMImpl());
+        this(new DefaultWhitespaceVM(), new DefaultCommandFactory());
     }
 
     public Interpreter(WhitespaceVM vm){
-        this.vm = vm;
+        this(vm, new DefaultCommandFactory());
     }
 
-    public void interpret(String script){
-        interpret(new StringReader(script));
+    public Interpreter(WhitespaceVM vm, CommandFactory cf){
+        this.vm = vm;
+        this.cf = cf;
+    }
+
+    public void interpret(String code){
+        interpret(new StringReader(code));
     }
 
     public void interpret(Reader input){
-        WhitespaceParser parser = new WhitespaceParser(input);
-        while (parser.hasNext()){
-            vm.getExecutor().addCommand(parser.next());
+        Parser parser = new Parser(cf, input);
+        Program.Builder builder = new Program.Builder();
+        Command command;
+        while ((command = parser.next()) != null){
+            builder.addCommand(command);
         }
+        vm.getProcessor().loadProgram(builder.build());
     }
 
     public void run(){
-        vm.getExecutor().run();
+        vm.getProcessor().executeAll(true);
+    }
+
+    public WhitespaceVM getVM(){
+        return vm;
+    }
+
+    public CommandFactory getCommandFactory(){
+        return cf;
     }
 }
