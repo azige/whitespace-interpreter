@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.azige.whitespace.text;
 
-import io.github.azige.whitespace.Constant;
 import io.github.azige.whitespace.command.Command;
 import io.github.azige.whitespace.command.CommandType;
 import io.github.azige.whitespace.command.LabelCommand;
 import io.github.azige.whitespace.command.ParameterCommand;
 
 /**
+ * 用于将指令格式化为伪代码的类。因为伪代码并没有标准，此类生成的伪代码可能也会变化。
  *
  * @author Azige
  */
 public class PseudoCodeFormatter{
 
+    /**
+     * 将指令格式化为伪代码。
+     *
+     * @param command 指令
+     * @return 对应此指令的伪代码文本
+     */
     public String format(Command command){
         if (command instanceof ParameterCommand){
             return format((ParameterCommand)command);
@@ -38,6 +43,12 @@ public class PseudoCodeFormatter{
         }
     }
 
+    /**
+     * 将带参数的指令格式化为伪代码。
+     *
+     * @param command 指令
+     * @return 对应此指令的伪代码文本
+     */
     public String format(ParameterCommand<?> command){
         Object param = command.getParam();
         if (param instanceof String){
@@ -46,15 +57,21 @@ public class PseudoCodeFormatter{
         return format(command.getType()) + " " + param;
     }
 
+    /**
+     * 将带标签指令格式化为伪代码。
+     *
+     * @param command 指令
+     * @return 对应此指令的伪代码文本
+     */
     public String format(LabelCommand command){
         return format(command.getType(), command.getLabel());
     }
 
-    public String format(CommandType type){
+    private String format(CommandType type){
         return type.toString();
     }
 
-    public String format(CommandType type, String label){
+    private String format(CommandType type, String label){
         return format(type) + " " + label;
     }
 }

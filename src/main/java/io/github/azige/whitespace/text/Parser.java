@@ -30,6 +30,7 @@ import io.github.azige.whitespace.command.Command;
 import io.github.azige.whitespace.command.CommandFactory;
 
 /**
+ * Whitespace语法解析器，此类使用{@link Tokenizer}将输入源转换为记号流，再将记号构造为指令。
  *
  * @author Azige
  */
@@ -41,9 +42,15 @@ public class Parser implements AutoCloseable{
     private final Map<Token.Type, Function<BigInteger, Command>> numberParamCommandMap;
     private final Map<Token.Type, Function<String, Command>> labelParamCommandMap;
 
+    /**
+     * 用指定的指令工厂和输入源构造对象。
+     *
+     * @param commandFactory 指令工厂
+     * @param input 输入源
+     */
     public Parser(CommandFactory commandFactory, Reader input){
         this.cf = commandFactory;
-        this.tokenizer = new Tokenizer(input);
+        this.tokenizer = new TokenizerImpl(input);
         simpleCommandMap = buildSimpleCommandMap();
         numberParamCommandMap = buildNumberParamCommandMap();
         labelParamCommandMap = buildLabelParamCommandMap();
@@ -98,6 +105,11 @@ public class Parser implements AutoCloseable{
         return map;
     }
 
+    /**
+     * 获得下一条指令。
+     *
+     * @return 下一条指令，如果已经到达流末尾则为null
+     */
     public Command next(){
         Token token = tokenizer.next();
         if (token == null){
@@ -110,7 +122,7 @@ public class Parser implements AutoCloseable{
             Token param = tokenizer.next();
             assert param.getType() == NUMBER;
             return numberParamCommandMap.get(token.getType()).apply(param.getNumber());
-        // }else if (labelParamCommandMap.containsKey(token.getType())) // assert true
+            // }else if (labelParamCommandMap.containsKey(token.getType())) // assert true
         }else{
             Token param = tokenizer.next();
             assert param.getType() == LABEL;

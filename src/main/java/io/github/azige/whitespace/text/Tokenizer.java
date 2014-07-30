@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.azige.whitespace.command;
+package io.github.azige.whitespace.text;
+
+import java.io.IOException;
 
 /**
- * 标签指令的简单实现。此类对象的指令类型一定是{@link CommandType.F_MARK}。
+ * Whitespace词法分析器，用于从文本中分析出记号。
  *
  * @author Azige
  */
-public class SimpleLabelCommand extends AbstractCommand implements LabelCommand{
-
-    private final String label;
+public interface Tokenizer extends AutoCloseable{
 
     /**
-     * 以一个标签构造对象。
+     * 获得下一个记号。
      *
-     * @param label 标签
+     * @return 下一个记号，如果已经没有更多的记号则为null
      */
-    public SimpleLabelCommand(String label){
-        super(CommandType.F_MARK);
-        this.label = label;
-    }
+    Token next();
 
     @Override
-    public String getLabel(){
-        return label;
-    }
+    void close() throws IOException;
 }

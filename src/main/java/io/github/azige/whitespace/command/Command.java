@@ -30,21 +30,4 @@ public interface Command extends Serializable{
      * @return 此指令的类型
      */
     CommandType getType();
-
-    public abstract class AbstractCommand implements Command{
-
-        private final CommandType type;
-
-        public AbstractCommand(CommandType type){
-            if (type == null){
-                throw new NullPointerException();
-            }
-            this.type = type;
-        }
-
-        @Override
-        public CommandType getType(){
-            return type;
-        }
-    }
 }

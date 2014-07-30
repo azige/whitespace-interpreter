@@ -11,14 +11,15 @@ import io.github.azige.whitespace.WhitespaceException;
 
 %public
 %final
-%class Tokenizer
-%implements AutoCloseable
+%class TokenizerImpl
+%implements Tokenizer
 %type Token
 %apiprivate
 %unicode
 %char
 
 %{
+    @Override
     public Token next(){
         try{
             return yylex();

@@ -34,18 +34,38 @@ public class Interpreter{
 
     private final CommandFactory cf;
 
+    /**
+     * 使用默认的命令工厂构造对象。
+     */
     public Interpreter(){
         this(new DefaultCommandFactory());
     }
 
+    /**
+     * 使用指定的命令工厂构造对象。
+     *
+     * @param cf 用于构造此对象的指令工厂
+     */
     public Interpreter(CommandFactory cf){
         this.cf = cf;
     }
 
+    /**
+     * 从字符串源解释程序。
+     *
+     * @param code 源程序代码
+     * @return 由源程序代码解释生成的程序对象
+     */
     public Program interpret(String code){
         return interpret(new StringReader(code));
     }
 
+    /**
+     * 从输入流解释程序。
+     *
+     * @param input 用于读入源程序的输入流
+     * @return 由源程序代码解释生成的程序对象
+     */
     public Program interpret(Reader input){
         Parser parser = new Parser(cf, input);
         Program.Builder builder = new Program.Builder();
@@ -57,6 +77,11 @@ public class Interpreter{
         return builder.build();
     }
 
+    /**
+     * 获得与此对象关联的命令工厂。
+     *
+     * @return 与此对象关联的命令工厂
+     */
     public CommandFactory getCommandFactory(){
         return cf;
     }

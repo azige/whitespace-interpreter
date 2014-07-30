@@ -27,7 +27,7 @@ public class TokenizerTest{
 
     @Test
     public void testSomething(){
-        Tokenizer tokenizer = new Tokenizer(new InputStreamReader(getClass().getResourceAsStream("/1to10.ws")));
+        Tokenizer tokenizer = new TokenizerImpl(new InputStreamReader(getClass().getResourceAsStream("/1to10.ws")));
         Token token;
         assertEquals(Token.Type.S_PUSH, tokenizer.next().getType());
         token = tokenizer.next();

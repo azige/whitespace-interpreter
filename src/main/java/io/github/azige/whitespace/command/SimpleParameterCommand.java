@@ -25,15 +25,21 @@ import io.github.azige.whitespace.vm.WhitespaceVM;
  * @author Azige
  * @param <T> 此指令的参数类型
  */
-public class SimpleParameterCommand<T> extends Command.AbstractCommand implements ParameterCommand<T>{
+public class SimpleParameterCommand<T> extends AbstractCommand implements ParameterCommand<T>{
 
     private final T param;
-    private final BiConsumer<WhitespaceVM, T> c;
+    private final BiConsumer<WhitespaceVM, T> action;
 
-    public SimpleParameterCommand(CommandType type, T param, BiConsumer<WhitespaceVM, T> c){
+    /**
+     * 以指令类型、参数和动作来构造一个指令。
+     * @param type 指令类型
+     * @param param 指令参数
+     * @param action 可序列化的动作
+     */
+    public SimpleParameterCommand(CommandType type, T param, BiConsumer<WhitespaceVM, T> action){
         super(type);
         this.param = param;
-        this.c = c;
+        this.action = action;
     }
 
     @Override
@@ -43,6 +49,6 @@ public class SimpleParameterCommand<T> extends Command.AbstractCommand implement
 
     @Override
     public void execute(WhitespaceVM vm){
-        c.accept(vm, param);
+        action.accept(vm, param);
     }
 }

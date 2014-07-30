@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.azige.whitespace.text;
 
 import java.io.OutputStream;
@@ -24,6 +23,7 @@ import io.github.azige.whitespace.command.Command;
 import io.github.azige.whitespace.command.DefaultCommandFactory;
 
 /**
+ * 用于将源程序整个转换为伪代码的类。
  *
  * @author Azige
  */
@@ -32,6 +32,11 @@ public class PseudoCodeGenerator{
     private final PrintStream out;
     private final PseudoCodeFormatter formatter = new PseudoCodeFormatter();
 
+    /**
+     * 以指定的输出流构造对象。生成的伪代码都将输出到指定的输出流中。
+     *
+     * @param out 输出流
+     */
     public PseudoCodeGenerator(OutputStream out){
         if (out instanceof PrintStream){
             this.out = (PrintStream)out;
@@ -40,6 +45,11 @@ public class PseudoCodeGenerator{
         }
     }
 
+    /**
+     * 从指定的输入流读入源代码并生成伪代码。
+     *
+     * @param input 输入流
+     */
     public void translate(Reader input){
         Parser parser = new Parser(new DefaultCommandFactory(), input);
         Command command;

@@ -32,6 +32,12 @@ public class SimpleProgramExecutor implements ProgramExecutor{
     private final LinkedList<Integer> callStack = new LinkedList<>();
     private int location = 0;
 
+    /**
+     * 以Whitespace虚拟机和程序来构造对象。
+     *
+     * @param vm 虚拟机
+     * @param program 程序
+     */
     public SimpleProgramExecutor(WhitespaceVM vm, Program program){
         this.vm = vm;
         this.program = program;

@@ -24,17 +24,23 @@ import io.github.azige.whitespace.vm.WhitespaceVM;
  *
  * @author Azige
  */
-public class SimpleCommand extends Command.AbstractCommand implements ExecutableCommand{
+public class SimpleCommand extends AbstractCommand implements ExecutableCommand{
 
-    private final Consumer<WhitespaceVM> c;
+    private final Consumer<WhitespaceVM> action;
 
-    public SimpleCommand(CommandType type, Consumer<WhitespaceVM> c){
+    /**
+     * 以指令类型和动作来构造一个指令。
+     *
+     * @param type 指令类型
+     * @param action 可序列化的动作
+     */
+    public SimpleCommand(CommandType type, Consumer<WhitespaceVM> action){
         super(type);
-        this.c = c;
+        this.action = action;
     }
 
     @Override
     public void execute(WhitespaceVM vm){
-        c.accept(vm);
+        action.accept(vm);
     }
 }

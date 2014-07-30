@@ -16,26 +16,29 @@
 package io.github.azige.whitespace.command;
 
 /**
- * 标签指令的简单实现。此类对象的指令类型一定是{@link CommandType.F_MARK}。
+ * 抽象指令，包含指令的基础部分的实现。
  *
  * @author Azige
  */
-public class SimpleLabelCommand extends AbstractCommand implements LabelCommand{
+public abstract class AbstractCommand implements Command{
 
-    private final String label;
+    private final CommandType type;
 
     /**
-     * 以一个标签构造对象。
+     * 用指定的指令类型构造对象。
      *
-     * @param label 标签
+     * @param type 此对象的指令类型
      */
-    public SimpleLabelCommand(String label){
-        super(CommandType.F_MARK);
-        this.label = label;
+    public AbstractCommand(CommandType type){
+        if (type == null){
+            throw new NullPointerException();
+        }
+        this.type = type;
     }
 
     @Override
-    public String getLabel(){
-        return label;
+    public CommandType getType(){
+        return type;
     }
+
 }
