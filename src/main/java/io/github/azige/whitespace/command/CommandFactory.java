@@ -32,7 +32,7 @@ public interface CommandFactory{
 
     ParameterCommand<Integer> dup(int index);
 
-    ParameterCommand<Integer> remove(int index);
+    ParameterCommand<Integer> slide(int index);
 
     ExecutableCommand swap();
 

@@ -75,6 +75,21 @@ public interface OperandStack{
     BigInteger remove(int index);
 
     /**
+     * 移除栈顶的前{@code n}个元素，但是保留栈顶元素。
+     *
+     * @param n 要移除的元素个数
+     */
+    void slide(int n);
+
+    /**
+     * 修改从栈顶开始的第{@code index}的元素的值。
+     *
+     * @param index 要修改的元素的索引
+     * @param number 修改的值
+     */
+    void modify(int index, BigInteger number);
+
+    /**
      * 交换栈顶的两个元素。
      */
     void swap();

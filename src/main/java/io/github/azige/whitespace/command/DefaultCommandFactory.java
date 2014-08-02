@@ -63,10 +63,10 @@ public class DefaultCommandFactory implements CommandFactory{
     }
 
     @Override
-    public ParameterCommand<Integer> remove(int index){
+    public ParameterCommand<Integer> slide(int index){
         return new SimpleParameterCommand<>(CommandType.S_REMOVE, index,
             (BiConsumer<WhitespaceVM, Integer> & Serializable)((vm, param) ->
-            vm.getOperandStack().remove(param)));
+            vm.getOperandStack().slide(param)));
     }
 
     @Override

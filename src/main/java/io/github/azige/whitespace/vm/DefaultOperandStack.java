@@ -73,6 +73,21 @@ public class DefaultOperandStack implements OperandStack{
     }
 
     @Override
+    public void slide(int n){
+        checkBound(n);
+        BigInteger top = list.pop();
+        while (--n > 0){
+            list.pop();
+        }
+        list.push(top);
+    }
+
+    @Override
+    public void modify(int index, BigInteger number){
+        list.set(index, number);
+    }
+
+    @Override
     public void swap(){
         checkBound(1);
         push(remove(1));

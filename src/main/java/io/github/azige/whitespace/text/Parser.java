@@ -88,7 +88,7 @@ public class Parser implements AutoCloseable{
 
         map.put(S_PUSH, cf::push);
         map.put(S_DUP2, wrapFunc(cf::dup));
-        map.put(S_REMOVE, wrapFunc(cf::remove));
+        map.put(S_REMOVE, wrapFunc(cf::slide));
 
         return map;
     }
