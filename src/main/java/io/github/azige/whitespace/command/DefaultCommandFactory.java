@@ -32,7 +32,7 @@ import io.github.azige.whitespace.vm.WhitespaceVM;
  *
  * @author Azige
  */
-public class DefaultCommandFactory extends CommandFactory{
+public class DefaultCommandFactory implements CommandFactory{
 
     @Override
     public ParameterCommand<BigInteger> push(BigInteger number){

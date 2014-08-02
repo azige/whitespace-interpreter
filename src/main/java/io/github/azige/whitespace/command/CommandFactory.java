@@ -22,53 +22,53 @@ import java.math.BigInteger;
  *
  * @author Azige
  */
-public abstract class CommandFactory{
+public interface CommandFactory{
 
-    public abstract ParameterCommand<BigInteger> push(BigInteger number);
+    ParameterCommand<BigInteger> push(BigInteger number);
 
-    public abstract ExecutableCommand discard();
+    ExecutableCommand discard();
 
-    public abstract ExecutableCommand dup();
+    ExecutableCommand dup();
 
-    public abstract ParameterCommand<Integer> dup(int index);
+    ParameterCommand<Integer> dup(int index);
 
-    public abstract ParameterCommand<Integer> remove(int index);
+    ParameterCommand<Integer> remove(int index);
 
-    public abstract ExecutableCommand swap();
+    ExecutableCommand swap();
 
-    public abstract ExecutableCommand add();
+    ExecutableCommand add();
 
-    public abstract ExecutableCommand sub();
+    ExecutableCommand sub();
 
-    public abstract ExecutableCommand mul();
+    ExecutableCommand mul();
 
-    public abstract ExecutableCommand div();
+    ExecutableCommand div();
 
-    public abstract ExecutableCommand mod();
+    ExecutableCommand mod();
 
-    public abstract ExecutableCommand store();
+    ExecutableCommand store();
 
-    public abstract ExecutableCommand retrieve();
+    ExecutableCommand retrieve();
 
-    public abstract LabelCommand mark(String label);
+    LabelCommand mark(String label);
 
-    public abstract ParameterCommand<String> callSubroutine(String label);
+    ParameterCommand<String> callSubroutine(String label);
 
-    public abstract ParameterCommand<String> jump(String label);
+    ParameterCommand<String> jump(String label);
 
-    public abstract ParameterCommand<String> jumpIfZero(String label);
+    ParameterCommand<String> jumpIfZero(String label);
 
-    public abstract ParameterCommand<String> jumpIfNegative(String label);
+    ParameterCommand<String> jumpIfNegative(String label);
 
-    public abstract ExecutableCommand returnFromSubroutine();
+    ExecutableCommand returnFromSubroutine();
 
-    public abstract ExecutableCommand exit();
+    ExecutableCommand exit();
 
-    public abstract ExecutableCommand printChar();
+    ExecutableCommand printChar();
 
-    public abstract ExecutableCommand printNumber();
+    ExecutableCommand printNumber();
 
-    public abstract ExecutableCommand readChar();
+    ExecutableCommand readChar();
 
-    public abstract ExecutableCommand readNumber();
+    ExecutableCommand readNumber();
 }

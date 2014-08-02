@@ -33,11 +33,23 @@ public class PseudoCodeGenerator{
     private final PseudoCodeFormatter formatter = new PseudoCodeFormatter();
 
     /**
-     * 以指定的输出流构造对象。生成的伪代码都将输出到指定的输出流中。
+     * 以指定的输出流构造对象，使用默认的格式化器。
      *
      * @param out 输出流
+     * @see PseudoCodeGenerator#PseudoCodeGenerator(OutputStream,
+     * PseudoCodeFormatter)
      */
     public PseudoCodeGenerator(OutputStream out){
+        this(out, new PseudoCodeFormatter());
+    }
+
+    /**
+     * 以指定的输出流和格式化器构造对象。生成的伪代码都将输出到指定的输出流中。
+     *
+     * @param out 输出流
+     * @param formatter 格式化器
+     */
+    public PseudoCodeGenerator(OutputStream out, PseudoCodeFormatter formatter){
         if (out instanceof PrintStream){
             this.out = (PrintStream)out;
         }else{

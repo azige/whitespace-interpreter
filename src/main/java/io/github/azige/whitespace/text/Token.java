@@ -71,7 +71,7 @@ public class Token{
     }
 
     /**
-     * 以指定的文本构造一个标签记号，其类型一定是{@link Type.LABEL}。
+     * 以指定的文本构造一个标签记号，其类型一定是{@link Type#LABEL}。
      *
      * @param text 标签文本
      */
@@ -80,7 +80,7 @@ public class Token{
     }
 
     /**
-     * 以指定的数值构造一个数值记号，其类型一定是{@link Type.NUMBER}。
+     * 以指定的数值构造一个数值记号，其类型一定是{@link Type#NUMBER}。
      *
      * @param number 数值
      */
@@ -106,7 +106,7 @@ public class Token{
     /**
      * 获得此记号的标签文本。
      *
-     * @return 此记号的标签文本，若类型不是{@link Type.LABEL}则为null
+     * @return 此记号的标签文本，若类型不是{@link Type#LABEL}则为null
      */
     public String getText(){
         return text;
@@ -115,7 +115,7 @@ public class Token{
     /**
      * 获得此记号的数值。
      *
-     * @return 此记号的数值，若类型不是{@link Type.NUMBER}则为null
+     * @return 此记号的数值，若类型不是{@link Type#NUMBER}则为null
      */
     public BigInteger getNumber(){
         return number;

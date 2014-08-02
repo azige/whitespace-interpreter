@@ -16,7 +16,6 @@
 package io.github.azige.whitespace.text;
 
 import io.github.azige.whitespace.command.Command;
-import io.github.azige.whitespace.command.CommandType;
 import io.github.azige.whitespace.command.LabelCommand;
 import io.github.azige.whitespace.command.ParameterCommand;
 
@@ -67,11 +66,11 @@ public class PseudoCodeFormatter{
         return format(command.getType(), command.getLabel());
     }
 
-    private String format(CommandType type){
+    private String format(Enum<?> type){
         return type.toString();
     }
 
-    private String format(CommandType type, String label){
+    private String format(Enum<?> type, String label){
         return format(type) + " " + label;
     }
 }

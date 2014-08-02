@@ -15,23 +15,7 @@
  */
 package io.github.azige.whitespace.vm;
 
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import io.github.azige.whitespace.WhitespaceException;
-import io.github.azige.whitespace.command.Command;
-import io.github.azige.whitespace.command.Program;
-import io.github.azige.whitespace.command.ProgramExecutor;
-import io.github.azige.whitespace.command.SimpleProgramExecutor;
+import java.util.Objects;
 
 /**
  * WhitespaceVM的默认实现。
@@ -40,220 +24,45 @@ import io.github.azige.whitespace.command.SimpleProgramExecutor;
  */
 public class DefaultWhitespaceVM implements WhitespaceVM{
 
-    private final OperandStack operandStack = new OperandStack(){
+    private final OperandStack operandStack;
+    private final HeapMemory heapMemory;
+    private final IODevice iODevice;
+    private final Processor processor;
 
-        private final LinkedList<BigInteger> list = new LinkedList<>();
+    private Processor createProcessor(){
+        return new AbstractProcessor(){
 
-        @Override
-        public void push(BigInteger number){
-            list.push(number);
-        }
-
-        @Override
-        public BigInteger pop(){
-            checkEmpty();
-            return list.pop();
-        }
-
-        @Override
-        public BigInteger peek(){
-            checkEmpty();
-            return list.peek();
-        }
-
-        @Override
-        public BigInteger peek(int index){
-            checkBound(index);
-            return list.get(index);
-        }
-
-        @Override
-        public void dup(){
-            checkEmpty();
-            push(peek());
-        }
-
-        @Override
-        public void dup(int index){
-            checkBound(index);
-            push(peek(index));
-        }
-
-        @Override
-        public BigInteger remove(int index){
-            checkBound(index);
-            return list.remove(index);
-        }
-
-        @Override
-        public void swap(){
-            checkBound(1);
-            push(remove(1));
-        }
-
-        @Override
-        public List<BigInteger> toList(){
-            return Collections.unmodifiableList(list);
-        }
-
-        private void checkEmpty(){
-            if (list.isEmpty()){
-                throw new WhitespaceException("栈为空");
+            @Override
+            protected WhitespaceVM getVM(){
+                return DefaultWhitespaceVM.this;
             }
-        }
+        };
+    }
 
-        private void checkBound(int index){
-            if (index < 0 || index >= list.size()){
-                throw new WhitespaceException("索引越界：" + index);
-            }
-        }
-    };
-
-    private final HeapMemory heapMemory = new HeapMemory(){
-
-        private final Map<BigInteger, BigInteger> map = new HashMap<>();
-
-        @Override
-        public void store(BigInteger address, BigInteger data){
-            map.put(address, data);
-        }
-
-        @Override
-        public BigInteger retrieve(BigInteger address){
-            checkAddress(address);
-            return map.get(address);
-        }
-
-        @Override
-        public BigInteger free(BigInteger address){
-            checkAddress(address);
-            return map.remove(address);
-        }
-
-        @Override
-        public Map<BigInteger, BigInteger> toMap(){
-            return Collections.unmodifiableMap(map);
-        }
-
-        private void checkAddress(BigInteger address){
-            if (!map.containsKey(address)){
-                throw new WhitespaceException("地址不可用：" + address);
-            }
-        }
-    };
-
-    private final IODevice iODevice = new IODevice(){
-
-        private Reader input = new InputStreamReader(System.in);
-        private PrintWriter output = new PrintWriter(System.out, true);
-
-        @Override
-        public Reader getInput(){
-            return input;
-        }
-
-        @Override
-        public void setInput(Reader input){
-            this.input = input;
-        }
-
-        @Override
-        public PrintWriter getOutput(){
-            return output;
-        }
-
-        @Override
-        public void setOutput(Writer output){
-            if (output instanceof PrintWriter){
-                this.output = (PrintWriter)output;
-            }else{
-                this.output = new PrintWriter(output, true);
-            }
-        }
-    };
-
-    private final Processor processor = new Processor(){
-
-        private ProgramExecutor executor = null;
-
-        @Override
-        public void loadProgram(Program program){
-            executor = new SimpleProgramExecutor(DefaultWhitespaceVM.this, program);
-        }
-
-        @Override
-        public boolean isReady(){
-            return executor != null;
-        }
-
-        @Override
-        public boolean executeOne(){
-            checkReady();
-            return executor.executeOne();
-        }
-
-        @Override
-        public Command getCurrentCommand(){
-            checkReady();
-            return executor.getCurrentCommand();
-        }
-
-        @Override
-        public void executeAll(boolean fromStart){
-            checkReady();
-            executor.executeAll(fromStart);
-        }
-
-        @Override
-        public int getLocation(){
-            checkReady();
-            return executor.getLocation();
-        }
-
-        @Override
-        public Program getProgram(){
-            checkReady();
-            return executor.getProgram();
-        }
-
-        @Override
-        public void jump(String label){
-            checkReady();
-            executor.jump(label);
-        }
-
-        @Override
-        public void reset(){
-            checkReady();
-            executor.reset();
-        }
-
-        @Override
-        public void end(){
-            checkReady();
-            executor.end();
-        }
-
-        @Override
-        public void call(String label){
-            checkReady();
-            executor.call(label);
-        }
-
-        @Override
-        public void ret(){
-            checkReady();
-            executor.ret();
-        }
-
-        private void checkReady(){
-            if (!isReady()){
-                throw new WhitespaceException("未装载程序");
-            }
-        }
-    };
-
+    /**
+     * 构造默认的虚拟机
+     */
     public DefaultWhitespaceVM(){
+        this.operandStack = new DefaultOperandStack();
+        this.heapMemory = new DefaultHeapMemory();
+        this.iODevice = new DefaultIODevice();
+        this.processor = createProcessor();
+    }
+
+    /**
+     * 使用指定的组件构造虚拟机。
+     *
+     * @param operandStack 操作数栈
+     * @param heapMemory 堆内存
+     * @param iODevice IO设备
+     * @param processor 处理器
+     * @throws NullPointerException 如果任何参数为null
+     */
+    public DefaultWhitespaceVM(OperandStack operandStack, HeapMemory heapMemory, IODevice iODevice, Processor processor){
+        this.operandStack = Objects.requireNonNull(operandStack);
+        this.heapMemory = Objects.requireNonNull(heapMemory);
+        this.iODevice = Objects.requireNonNull(iODevice);
+        this.processor = Objects.requireNonNull(processor);
     }
 
     @Override

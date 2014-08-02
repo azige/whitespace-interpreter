@@ -21,7 +21,7 @@ package io.github.azige.whitespace.command;
  * @author Azige
  * @param <T> 此指令的参数类型
  */
-public interface ParameterCommand<T> extends ExecutableCommand{
+public interface ParameterCommand<T> extends Command{
 
     /**
      * 获得此指令的参数

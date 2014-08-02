@@ -20,7 +20,7 @@ package io.github.azige.whitespace.command;
  *
  * @author Azige
  */
-public enum CommandType{
+public enum CommandType implements Command.Type{
 
     S_PUSH,
     S_DISCARD,

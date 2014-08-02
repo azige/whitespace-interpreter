@@ -34,7 +34,7 @@ public class Program implements Serializable{
     private final List<Command> commands;
     private final Map<String, Integer> labelMap;
 
-    private Program(List<Command> commands, Map<String, Integer> labelMap){
+    protected Program(List<Command> commands, Map<String, Integer> labelMap){
         this.commands = Collections.unmodifiableList(new ArrayList<>(commands));
         this.labelMap = Collections.unmodifiableMap(new LinkedHashMap<>(labelMap));
     }
@@ -62,8 +62,8 @@ public class Program implements Serializable{
      */
     public static class Builder{
 
-        private final List<Command> commands = new ArrayList<>();
-        private final Map<String, Integer> labelMap = new LinkedHashMap<>();
+        protected final List<Command> commands = new ArrayList<>();
+        protected final Map<String, Integer> labelMap = new LinkedHashMap<>();
 
         /**
          * 添加一条指令。

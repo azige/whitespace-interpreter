@@ -54,14 +54,14 @@ public interface ProgramExecutor{
     /**
      * 获得此执行器正在执行的程序
      *
-     * @return
+     * @return 此执行器正在执行的程序
      */
     Program getProgram();
 
     /**
      * 跳转到指定的标签
      *
-     * @param label
+     * @param label 要跳转的标签
      */
     void jump(String label);
 

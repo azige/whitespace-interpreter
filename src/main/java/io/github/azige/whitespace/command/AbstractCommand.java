@@ -22,14 +22,14 @@ package io.github.azige.whitespace.command;
  */
 public abstract class AbstractCommand implements Command{
 
-    private final CommandType type;
+    private final Enum<? extends Command.Type> type;
 
     /**
      * 用指定的指令类型构造对象。
      *
      * @param type 此对象的指令类型
      */
-    public AbstractCommand(CommandType type){
+    public AbstractCommand(Enum<? extends Command.Type> type){
         if (type == null){
             throw new NullPointerException();
         }
@@ -37,7 +37,7 @@ public abstract class AbstractCommand implements Command{
     }
 
     @Override
-    public CommandType getType(){
+    public Enum<? extends Command.Type> getType(){
         return type;
     }
 

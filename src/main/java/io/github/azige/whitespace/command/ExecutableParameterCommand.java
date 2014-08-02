@@ -15,32 +15,12 @@
  */
 package io.github.azige.whitespace.command;
 
-import java.util.function.Consumer;
-
-import io.github.azige.whitespace.vm.WhitespaceVM;
-
 /**
- * 没有参数的简单指令的实现。
+ * 表示可执行的带参数的指令。
  *
  * @author Azige
+ * @param <T> 参数的类型
  */
-public class SimpleCommand extends AbstractCommand implements ExecutableCommand{
+public interface ExecutableParameterCommand<T> extends ExecutableCommand, ParameterCommand<T>{
 
-    private final Consumer<WhitespaceVM> action;
-
-    /**
-     * 以指令类型和动作来构造一个指令。
-     *
-     * @param type 指令类型
-     * @param action 可序列化的动作
-     */
-    public SimpleCommand(Enum<? extends Command.Type> type, Consumer<WhitespaceVM> action){
-        super(type);
-        this.action = action;
-    }
-
-    @Override
-    public void execute(WhitespaceVM vm){
-        action.accept(vm);
-    }
 }

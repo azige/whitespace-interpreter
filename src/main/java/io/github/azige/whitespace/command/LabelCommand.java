@@ -16,16 +16,29 @@
 package io.github.azige.whitespace.command;
 
 /**
- * 表示非可执行的，仅起标签作用的指令。
+ * 表示起标签作用的指令，标签使用字符串类型。
  *
  * @author Azige
  */
-public interface LabelCommand extends Command{
+public interface LabelCommand extends ParameterCommand<String>{
+
+    /**
+     * 获得此指令的参数，即为此指令所标记的标签。
+     *
+     * @return 此指令所标记的标签
+     */
+    @Override
+    public String getParam();
 
     /**
      * 获得此指令所标记的标签
      *
+     * @deprecated 使用{@link #getParam()}取代
      * @return 此指令所标记的标签
      */
-    String getLabel();
+    // TODO: 清理掉此方法并重构使用了此方法的类
+    @Deprecated
+    default String getLabel(){
+        return getParam();
+    }
 }

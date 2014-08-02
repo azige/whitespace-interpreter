@@ -18,16 +18,23 @@ package io.github.azige.whitespace.command;
 import java.io.Serializable;
 
 /**
- * 表示Whitespace指令。指令是可以序列化的。
+ * 表示Whitespace指令，指令拥有用枚举类表示的类型。指令是可以序列化的。
  *
  * @author Azige
  */
 public interface Command extends Serializable{
 
     /**
+     * 表示指令类型的标记接口。此接口应当只被枚举类实现。
+     */
+    public interface Type{
+
+    }
+
+    /**
      * 获得此指令的类型
      *
      * @return 此指令的类型
      */
-    CommandType getType();
+    Enum<? extends Type> getType();
 }
