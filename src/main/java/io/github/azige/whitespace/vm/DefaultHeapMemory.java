@@ -53,10 +53,14 @@ public class DefaultHeapMemory implements HeapMemory{
         return Collections.unmodifiableMap(map);
     }
 
+    @Override
+    public boolean isAvailable(BigInteger address){
+        return map.containsKey(address);
+    }
+
     private void checkAddress(BigInteger address){
-        if (!map.containsKey(address)){
+        if (!isAvailable(address)){
             throw new WhitespaceException("地址不可用：" + address);
         }
     }
-
 }

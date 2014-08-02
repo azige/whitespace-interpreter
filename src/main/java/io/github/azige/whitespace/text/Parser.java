@@ -69,7 +69,7 @@ public class Parser implements AutoCloseable{
         map.put(A_MOD, cf::mod);
         map.put(H_STORE, cf::store);
         map.put(H_RETRIEVE, cf::retrieve);
-        map.put(F_RETURN, cf::returnFromSubroutine);
+        map.put(F_RETURN, cf::ret);
         map.put(F_EXIT, cf::exit);
         map.put(I_PCHAR, cf::printChar);
         map.put(I_PNUM, cf::printNumber);
@@ -97,7 +97,7 @@ public class Parser implements AutoCloseable{
         Map<Token.Type, Function<String, Command>> map = new HashMap<>();
 
         map.put(F_MARK, cf::mark);
-        map.put(F_CALL, cf::callSubroutine);
+        map.put(F_CALL, cf::call);
         map.put(F_JUMP, cf::jump);
         map.put(F_JUMPZ, cf::jumpIfZero);
         map.put(F_JUMPN, cf::jumpIfNegative);

@@ -35,7 +35,7 @@ import io.github.azige.whitespace.vm.WhitespaceVM;
 public class DefaultCommandFactory implements CommandFactory{
 
     @Override
-    public ParameterCommand<BigInteger> push(BigInteger number){
+    public ExecutableParameterCommand<BigInteger> push(BigInteger number){
         return new SimpleParameterCommand<>(CommandType.S_PUSH, number,
             (BiConsumer<WhitespaceVM, BigInteger> & Serializable)((vm, param) ->
             vm.getOperandStack().push(param)));
@@ -56,14 +56,14 @@ public class DefaultCommandFactory implements CommandFactory{
     }
 
     @Override
-    public ParameterCommand<Integer> dup(int index){
+    public ExecutableParameterCommand<Integer> dup(int index){
         return new SimpleParameterCommand<>(CommandType.S_DUP2, index,
             (BiConsumer<WhitespaceVM, Integer> & Serializable)((vm, param) ->
             vm.getOperandStack().dup(param)));
     }
 
     @Override
-    public ParameterCommand<Integer> slide(int index){
+    public ExecutableParameterCommand<Integer> slide(int index){
         return new SimpleParameterCommand<>(CommandType.S_REMOVE, index,
             (BiConsumer<WhitespaceVM, Integer> & Serializable)((vm, param) ->
             vm.getOperandStack().slide(param)));
@@ -75,7 +75,13 @@ public class DefaultCommandFactory implements CommandFactory{
             (Consumer<WhitespaceVM> & Serializable)(vm -> vm.getOperandStack().swap()));
     }
 
-    private static void doMath(WhitespaceVM vm, BinaryOperator<BigInteger> func){
+    /**
+     * 进行数学计算，此方法将虚拟机栈中取出两个操作数进行运算，后取出的为左操作数，运算结果放到栈顶。
+     *
+     * @param vm 虚拟机实例
+     * @param func 运算操作
+     */
+    protected static void doMath(WhitespaceVM vm, BinaryOperator<BigInteger> func){
         BigInteger right = vm.getOperandStack().pop();
         BigInteger left = vm.getOperandStack().pop();
         vm.getOperandStack().push(func.apply(left, right));
@@ -142,21 +148,21 @@ public class DefaultCommandFactory implements CommandFactory{
     }
 
     @Override
-    public ParameterCommand<String> callSubroutine(String label){
+    public ExecutableParameterCommand<String> call(String label){
         return new SimpleParameterCommand<>(CommandType.F_CALL, label,
             (BiConsumer<WhitespaceVM, String> & Serializable)((vm, param) ->
             vm.getProcessor().call(param)));
     }
 
     @Override
-    public ParameterCommand<String> jump(String label){
+    public ExecutableParameterCommand<String> jump(String label){
         return new SimpleParameterCommand<>(CommandType.F_JUMP, label,
             (BiConsumer<WhitespaceVM, String> & Serializable)((vm, param) ->
             vm.getProcessor().jump(param)));
     }
 
     @Override
-    public ParameterCommand<String> jumpIfZero(String label){
+    public ExecutableParameterCommand<String> jumpIfZero(String label){
         return new SimpleParameterCommand<>(CommandType.F_JUMPZ, label,
             (BiConsumer<WhitespaceVM, String> & Serializable)((vm, param) -> {
                 if (vm.getOperandStack().pop().equals(BigInteger.ZERO)){
@@ -166,7 +172,7 @@ public class DefaultCommandFactory implements CommandFactory{
     }
 
     @Override
-    public ParameterCommand<String> jumpIfNegative(String label){
+    public ExecutableParameterCommand<String> jumpIfNegative(String label){
         return new SimpleParameterCommand<>(CommandType.F_JUMPN, label,
             (BiConsumer<WhitespaceVM, String> & Serializable)((vm, param) -> {
                 if (vm.getOperandStack().pop().compareTo(BigInteger.ZERO) < 0){
@@ -176,7 +182,7 @@ public class DefaultCommandFactory implements CommandFactory{
     }
 
     @Override
-    public ExecutableCommand returnFromSubroutine(){
+    public ExecutableCommand ret(){
         return new SimpleCommand(CommandType.F_RETURN,
             (Consumer<WhitespaceVM> & Serializable)(vm ->
             vm.getProcessor().ret()));

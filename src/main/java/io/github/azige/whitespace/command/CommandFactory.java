@@ -24,15 +24,15 @@ import java.math.BigInteger;
  */
 public interface CommandFactory{
 
-    ParameterCommand<BigInteger> push(BigInteger number);
+    ExecutableParameterCommand<BigInteger> push(BigInteger number);
 
     ExecutableCommand discard();
 
     ExecutableCommand dup();
 
-    ParameterCommand<Integer> dup(int index);
+    ExecutableParameterCommand<Integer> dup(int index);
 
-    ParameterCommand<Integer> slide(int index);
+    ExecutableParameterCommand<Integer> slide(int index);
 
     ExecutableCommand swap();
 
@@ -52,15 +52,15 @@ public interface CommandFactory{
 
     LabelCommand mark(String label);
 
-    ParameterCommand<String> callSubroutine(String label);
+    ExecutableParameterCommand<String> call(String label);
 
-    ParameterCommand<String> jump(String label);
+    ExecutableParameterCommand<String> jump(String label);
 
-    ParameterCommand<String> jumpIfZero(String label);
+    ExecutableParameterCommand<String> jumpIfZero(String label);
 
-    ParameterCommand<String> jumpIfNegative(String label);
+    ExecutableParameterCommand<String> jumpIfNegative(String label);
 
-    ExecutableCommand returnFromSubroutine();
+    ExecutableCommand ret();
 
     ExecutableCommand exit();
 
