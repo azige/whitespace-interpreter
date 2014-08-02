@@ -50,6 +50,14 @@ public interface HeapMemory{
     BigInteger free(BigInteger address);
 
     /**
+     * 检查指定的地址是否可用。
+     *
+     * @param address 要访问的地址
+     * @return 如果指定的地址存储了数据并且没有被释放则为true
+     */
+    boolean isAvailable(BigInteger address);
+
+    /**
      * 获得此对象的<b>不可变</b>映射的表示形式。
      *
      * @return 对应此对象的映射
