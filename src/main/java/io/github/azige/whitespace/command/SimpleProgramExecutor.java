@@ -112,7 +112,10 @@ public class SimpleProgramExecutor implements ProgramExecutor{
 
     @Override
     public void ret(){
-        location = callStack.pop();
+        if (callStack.isEmpty()){
+            end();
+        }else{
+            location = callStack.pop();
+        }
     }
-
 }
