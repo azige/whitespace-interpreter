@@ -15,123 +15,24 @@
  */
 package io.github.azige.whitespace.text;
 
-import static io.github.azige.whitespace.text.Token.Type.*;
-
 import java.io.IOException;
-import java.io.Reader;
-import java.math.BigInteger;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import io.github.azige.whitespace.command.Command;
-import io.github.azige.whitespace.command.CommandFactory;
 
 /**
- * Whitespace语法解析器，此类使用{@link Tokenizer}将输入源转换为记号流，再将记号构造为指令。
+ * Whitespace语法解析器。
  *
  * @author Azige
  */
-public class Parser implements AutoCloseable{
-
-    private final Tokenizer tokenizer;
-    private final CommandFactory cf;
-    private final Map<Token.Type, Supplier<Command>> simpleCommandMap;
-    private final Map<Token.Type, Function<BigInteger, Command>> numberParamCommandMap;
-    private final Map<Token.Type, Function<String, Command>> labelParamCommandMap;
-
-    /**
-     * 用指定的指令工厂和输入源构造对象。
-     *
-     * @param commandFactory 指令工厂
-     * @param input 输入源
-     */
-    public Parser(CommandFactory commandFactory, Reader input){
-        this.cf = commandFactory;
-        this.tokenizer = new TokenizerImpl(input);
-        simpleCommandMap = buildSimpleCommandMap();
-        numberParamCommandMap = buildNumberParamCommandMap();
-        labelParamCommandMap = buildLabelParamCommandMap();
-    }
-
-    private Map<Token.Type, Supplier<Command>> buildSimpleCommandMap(){
-        Map<Token.Type, Supplier<Command>> map = new HashMap<>();
-
-        map.put(S_DUP, cf::dup);
-        map.put(S_SWAP, cf::swap);
-        map.put(S_DISCARD, cf::discard);
-        map.put(A_ADD, cf::add);
-        map.put(A_SUB, cf::sub);
-        map.put(A_MUL, cf::mul);
-        map.put(A_DIV, cf::div);
-        map.put(A_MOD, cf::mod);
-        map.put(H_STORE, cf::store);
-        map.put(H_RETRIEVE, cf::retrieve);
-        map.put(F_RETURN, cf::ret);
-        map.put(F_EXIT, cf::exit);
-        map.put(I_PCHAR, cf::printChar);
-        map.put(I_PNUM, cf::printNumber);
-        map.put(I_RCHAR, cf::readChar);
-        map.put(I_RNUM, cf::readNumber);
-
-        return Collections.unmodifiableMap(map);
-    }
-
-    private static Function<BigInteger, Command> wrapFunc(Function<Integer, Command> func){
-        return n -> func.apply(n.intValue());
-    }
-
-    private Map<Token.Type, Function<BigInteger, Command>> buildNumberParamCommandMap(){
-        Map<Token.Type, Function<BigInteger, Command>> map = new HashMap<>();
-
-        map.put(S_PUSH, cf::push);
-        map.put(S_DUP2, wrapFunc(cf::dup));
-        map.put(S_REMOVE, wrapFunc(cf::slide));
-
-        return map;
-    }
-
-    private Map<Token.Type, Function<String, Command>> buildLabelParamCommandMap(){
-        Map<Token.Type, Function<String, Command>> map = new HashMap<>();
-
-        map.put(F_MARK, cf::mark);
-        map.put(F_CALL, cf::call);
-        map.put(F_JUMP, cf::jump);
-        map.put(F_JUMPZ, cf::jumpIfZero);
-        map.put(F_JUMPN, cf::jumpIfNegative);
-
-        return map;
-    }
+public interface Parser extends AutoCloseable{
 
     /**
      * 获得下一条指令。
      *
      * @return 下一条指令，如果已经到达流末尾则为null
      */
-    public Command next(){
-        Token token = tokenizer.next();
-        if (token == null){
-            return null;
-        }
-
-        if (simpleCommandMap.containsKey(token.getType())){
-            return simpleCommandMap.get(token.getType()).get();
-        }else if (numberParamCommandMap.containsKey(token.getType())){
-            Token param = tokenizer.next();
-            assert param.getType() == NUMBER;
-            return numberParamCommandMap.get(token.getType()).apply(param.getNumber());
-            // }else if (labelParamCommandMap.containsKey(token.getType())) // assert true
-        }else{
-            Token param = tokenizer.next();
-            assert param.getType() == LABEL;
-            return labelParamCommandMap.get(token.getType()).apply(param.getText());
-        }
-    }
+    Command next();
 
     @Override
-    public void close() throws IOException{
-        tokenizer.close();
-    }
+    void close() throws IOException;
 }

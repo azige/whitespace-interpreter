@@ -33,7 +33,7 @@ public class ParserTest{
 
     @Test
     public void testSomeMethod(){
-        Parser parser = new Parser(new DefaultCommandFactory(), new InputStreamReader(getClass().getResourceAsStream("/1to10.ws")));
+        Parser parser = new DefaultParser(new InputStreamReader(getClass().getResourceAsStream("/1to10.ws")), new DefaultCommandFactory());
         assertEquals(CommandType.S_PUSH, parser.next().getType());
         assertEquals(CommandType.F_MARK, parser.next().getType());
         assertEquals(CommandType.S_DUP, parser.next().getType());

@@ -30,7 +30,7 @@ import io.github.azige.whitespace.command.DefaultCommandFactory;
 public class PseudoCodeGenerator{
 
     private final PrintStream out;
-    private final PseudoCodeFormatter formatter = new PseudoCodeFormatter();
+    private final PseudoCodeFormatter formatter;
 
     /**
      * 以指定的输出流构造对象，使用默认的格式化器。
@@ -55,15 +55,24 @@ public class PseudoCodeGenerator{
         }else{
             this.out = new PrintStream(out);
         }
+        this.formatter = formatter;
     }
 
     /**
-     * 从指定的输入流读入源代码并生成伪代码。
+     * 从指定的输入流读入源代码并生成伪代码，将使用默认的解析器。
      *
      * @param input 输入流
      */
     public void translate(Reader input){
-        Parser parser = new Parser(new DefaultCommandFactory(), input);
+        translate(new DefaultParser(input, new DefaultCommandFactory()));
+    }
+
+    /**
+     * 从指定的解析器读入指令并生成伪代码。
+     *
+     * @param parser 解析器
+     */
+    public void translate(Parser parser){
         Command command;
         while ((command = parser.next()) != null){
             out.println(formatter.format(command));
