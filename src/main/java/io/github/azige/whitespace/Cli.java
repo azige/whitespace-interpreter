@@ -15,6 +15,7 @@
  */
 package io.github.azige.whitespace;
 
+import java.io.BufferedReader;
 
 import io.github.azige.whitespace.text.PseudoCodeGenerator;
 
@@ -26,12 +27,16 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import io.github.azige.whitespace.command.Program;
+import io.github.azige.whitespace.szm.DefaultSzmCommandFactory;
+import io.github.azige.whitespace.szm.SzmCommandFactory;
+import io.github.azige.whitespace.szm.SzmParser;
 import io.github.azige.whitespace.vm.DefaultWhitespaceVM;
 import io.github.azige.whitespace.vm.WhitespaceVM;
 import org.apache.commons.cli.BasicParser;
@@ -52,6 +57,9 @@ import org.apache.commons.cli.ParseException;
 public class Cli{
 
     static final String WHITESPACE_BINARY_FILE_SUFFIX = ".wso";
+    static final String DEFAULT_ENCODING = "UTF-8";
+    static Charset encoding;
+    static boolean useSzm = false;
 
     public static void main(String[] args){
         Options options = new Options()
@@ -59,7 +67,9 @@ public class Cli{
             .addOptionGroup(new OptionGroup()
                 .addOption(new Option("p", "不运行程序，而是将源程序翻译成可阅读的伪代码"))
                 .addOption(new Option("c", "不运行程序，而是将源程序编译为二进制文件"))
-            );
+            )
+            .addOption(null, "szm", false, "使用水沝淼语言扩展，输入的源程序将作为水沝淼语言解释")
+            .addOption("e", "encoding", true, "指定源文件编码，默认使用" + DEFAULT_ENCODING);
 
         try{
             CommandLineParser parser = new BasicParser();
@@ -68,6 +78,16 @@ public class Cli{
             if (cl.hasOption('h')){
                 printHelp(System.out, options);
                 return;
+            }
+
+            if (cl.hasOption('e')){
+                encoding = Charset.forName(cl.getOptionValue('e'));
+            }else{
+                encoding = Charset.forName(DEFAULT_ENCODING);
+            }
+
+            if (cl.hasOption("szm")){
+                useSzm = true;
             }
 
             String[] fileArgs = cl.getArgs();
@@ -100,16 +120,16 @@ public class Cli{
             ObjectInputStream oinput = new ObjectInputStream(new GZIPInputStream(input));
             program = (Program)oinput.readObject();
         }else{
-            Interpreter interpreter = new Interpreter();
-            program = interpreter.interpret(new InputStreamReader(input));
+            Interpreter interpreter = createInterpreter();
+            program = interpreter.interpret(createReader(input));
         }
         vm.getProcessor().loadProgram(program);
         vm.getProcessor().executeAll(true);
     }
 
     static void compile(InputStream input, String path) throws IOException{
-        Interpreter interpreter = new Interpreter();
-        Program program = interpreter.interpret(new InputStreamReader(input));
+        Interpreter interpreter = createInterpreter();
+        Program program = interpreter.interpret(createReader(input));
         path = path.replaceFirst("\\.[^\\.]+$", WHITESPACE_BINARY_FILE_SUFFIX);
         try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(Files.newOutputStream(Paths.get(path))))){
             output.writeObject(program);
@@ -118,7 +138,24 @@ public class Cli{
 
     static void printPseudoCode(InputStream input){
         PseudoCodeGenerator generator = new PseudoCodeGenerator(System.out);
-        generator.translate(new InputStreamReader(input));
+        if (useSzm){
+            generator.translate(new SzmParser(createReader(input), new DefaultSzmCommandFactory()));
+        }else{
+            generator.translate(createReader(input));
+        }
+    }
+
+    static Interpreter createInterpreter(){
+        if (useSzm){
+            return new Interpreter(new DefaultSzmCommandFactory(),
+                (reader, cf) -> new SzmParser(reader, (SzmCommandFactory)cf));
+        }else{
+            return new Interpreter();
+        }
+    }
+
+    static Reader createReader(InputStream input){
+        return new BufferedReader(new InputStreamReader(input, encoding));
     }
 
     static void printHelp(PrintStream out, Options options){
