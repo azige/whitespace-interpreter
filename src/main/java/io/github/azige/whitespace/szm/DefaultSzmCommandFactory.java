@@ -152,7 +152,7 @@ public class DefaultSzmCommandFactory extends DefaultCommandFactory implements S
             doMath(vm, BigInteger::xor));
     }
 
-    private class FunctionCommand extends SimpleParameterCommand<String> implements LabelCommand{
+    private static class FunctionCommand extends SimpleParameterCommand<String> implements LabelCommand{
 
         public FunctionCommand(Enum<? extends Type> type, String param, BiConsumer<WhitespaceVM, String> action){
             super(type, param, action);

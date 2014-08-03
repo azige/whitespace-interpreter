@@ -106,10 +106,10 @@ public class Cli{
                 }
             }
         }catch (ParseException ex){
-            System.err.println(ex.getLocalizedMessage());
+            ex.printStackTrace();
             printHelp(System.err, options);
         }catch (Exception ex){
-            System.err.println(ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
     }
 
