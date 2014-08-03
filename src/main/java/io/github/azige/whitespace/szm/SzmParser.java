@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.math.BigInteger;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import io.github.azige.whitespace.command.Command;
+import io.github.azige.whitespace.command.CommandType;
 import io.github.azige.whitespace.text.Parser;
 
 /**
@@ -216,10 +218,14 @@ public class SzmParser implements Parser{
 
     private void buildFunction(){
         outputBuffer.push(cf.function(functionContext.name, functionContext.localVariableMap.size()));
-        if (functionContext.name.equals(MAIN_FUNCTION_NAME)){
-            outputBuffer.offer(cf.exit());
-        }else{
-            outputBuffer.offer(cf.ret());
+        Command command = outputBuffer.peekLast();
+        // 如果函数的最后没有返回或退出指令，则加上一条
+        if (!Arrays.<Enum<?>>asList(CommandType.F_RETURN, CommandType.F_EXIT, SzmCommandType.F_EXIT2).contains(command.getType())){
+            if (functionContext.name.equals(MAIN_FUNCTION_NAME)){
+                outputBuffer.offer(cf.exit());
+            }else{
+                outputBuffer.offer(cf.ret());
+            }
         }
     }
 
